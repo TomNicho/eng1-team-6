@@ -3,6 +3,63 @@
  */
 package main.java.game;
 
-public class MainRunner {
-    
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+public class MainRunner extends ApplicationAdapter {
+    private OrthographicCamera camera;
+    private Texture numberSix, priateHat;
+    private Vector2 piratePosition, sixOffset, pirateSize, sixSize;
+    private Color background;
+    private Batch batch;
+
+    @Override
+    public void create() {
+        background = new Color(1f, 1f, 1f, 1f);
+        numberSix = new Texture(Gdx.files.internal("textures/number6.png"));
+        priateHat = new Texture(Gdx.files.internal("textures/pirate_hat.png"));
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false);
+
+        batch = new SpriteBatch();
+
+        sixOffset = new Vector2(0, -40);
+        sixSize = new Vector2(175,175);
+        piratePosition = new Vector2(200, 200);
+        pirateSize = new Vector2(256,256);
+    }
+
+    @Override 
+    public void render() {
+        ScreenUtils.clear(background);
+
+        camera.update();
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        batch.draw(numberSix, piratePosition.x - sixSize.x / 2 + sixOffset.x, piratePosition.y - sixSize.y / 2 + sixOffset.y, sixSize.x, sixSize.y);
+        batch.draw(priateHat, piratePosition.x - pirateSize.x / 2, piratePosition.y - pirateSize.y / 2, pirateSize.x, pirateSize.y);
+        batch.end();
+
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) piratePosition.x -= 100 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) piratePosition.x += 100 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.UP)) piratePosition.y += 100 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.DOWN)) piratePosition.y -= 100 * Gdx.graphics.getDeltaTime();
+    }
+
+    @Override
+    public void dispose() {
+        numberSix.dispose();
+        priateHat.dispose();
+        batch.dispose();
+    }
 }
