@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>lib</name>
-	<comment>Project lib created by Buildship.</comment>
+	<name>eng1-t6-game-desktop</name>
+	<comment>Project eng1-t6-game-desktop created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -20,9 +20,16 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>assets</name>
+			<type>2</type>
+			<location>C:/Users/tnix2/Documents/Coding/LibgdxTest/core/assets</location>
+		</link>
+	</linkedResources>
 	<filteredResources>
 		<filter>
-			<id>1637238795394</id>
+			<id>1637242414043</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

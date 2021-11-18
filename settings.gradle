@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'LibgdxTest'
-include('lib')
+include 'core', 'desktop'
