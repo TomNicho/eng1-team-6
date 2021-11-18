@@ -16,14 +16,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainRunner extends ApplicationAdapter {
     private OrthographicCamera camera;
-    private Texture numberSix, priateHat;
+    private Texture numberSix, priateHat, background;
     private Vector2 piratePosition, sixOffset, pirateSize, sixSize;
-    private Color background;
+    private Color backgroundColour;
     private Batch batch;
 
     @Override
     public void create() {
-        background = new Color(1f, 1f, 1f, 1f);
+        backgroundColour = new Color(1f, 1f, 1f, 1f);
+
+        background = new Texture(Gdx.files.internal("textures/background.jpg"));
         numberSix = new Texture(Gdx.files.internal("textures/number6.png"));
         priateHat = new Texture(Gdx.files.internal("textures/pirate_hat.png"));
 
@@ -32,7 +34,7 @@ public class MainRunner extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-        sixOffset = new Vector2(0, -40);
+        sixOffset = new Vector2(0, -50);
         sixSize = new Vector2(175,175);
         piratePosition = new Vector2(200, 200);
         pirateSize = new Vector2(256,256);
@@ -40,20 +42,21 @@ public class MainRunner extends ApplicationAdapter {
 
     @Override 
     public void render() {
-        ScreenUtils.clear(background);
+        ScreenUtils.clear(backgroundColour);
 
         camera.update();
-
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
+        batch.draw(background, 0, 0, 1200, 720);
         batch.draw(numberSix, piratePosition.x - sixSize.x / 2 + sixOffset.x, piratePosition.y - sixSize.y / 2 + sixOffset.y, sixSize.x, sixSize.y);
         batch.draw(priateHat, piratePosition.x - pirateSize.x / 2, piratePosition.y - pirateSize.y / 2, pirateSize.x, pirateSize.y);
         batch.end();
 
-        if (Gdx.input.isKeyPressed(Keys.LEFT)) piratePosition.x -= 100 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.RIGHT)) piratePosition.x += 100 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.UP)) piratePosition.y += 100 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.DOWN)) piratePosition.y -= 100 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) piratePosition.x -= 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) piratePosition.x += 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.UP)) piratePosition.y += 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.DOWN)) piratePosition.y -= 200 * Gdx.graphics.getDeltaTime();
     }
 
     @Override
@@ -61,5 +64,6 @@ public class MainRunner extends ApplicationAdapter {
         numberSix.dispose();
         priateHat.dispose();
         batch.dispose();
+        background.dispose();
     }
 }
