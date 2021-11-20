@@ -24,10 +24,10 @@ public class MainRunner extends ApplicationAdapter {
     @Override
     public void create() {
         backgroundColour = new Color(1f, 1f, 1f, 1f);
-
-        background = new Texture(Gdx.files.internal("textures/background.jpg"));
-        numberSix = new Texture(Gdx.files.internal("textures/number6.png"));
-        priateHat = new Texture(Gdx.files.internal("textures/pirate_hat.png"));
+        String path = Gdx.files.getLocalStoragePath();
+        background = new Texture(Gdx.files.internal("core/assets/textures/background.jpg"));
+        numberSix = new Texture(Gdx.files.internal("core/assets/textures/number6.png"));
+        priateHat = new Texture(Gdx.files.internal("core/assets/textures/pirate_hat.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
@@ -63,7 +63,7 @@ public class MainRunner extends ApplicationAdapter {
     public void dispose() {
         numberSix.dispose();
         priateHat.dispose();
-        batch.dispose();
         background.dispose();
+        batch.dispose();  
     }
 }
