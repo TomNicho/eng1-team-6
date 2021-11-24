@@ -66,4 +66,19 @@ public class MainRunner extends ApplicationAdapter {
         batch.dispose();
         background.dispose();
     }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void pause() {
+        
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        
+    }
 }
