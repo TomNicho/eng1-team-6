@@ -4,6 +4,17 @@ body{
     overflow-x: hidden;
     font-family: 'Roboto', sans-serif;
 }
+@keyframes rock {
+    from {
+      top: 20px;
+      
+    }
+
+    to {
+      top: 0px;
+    }
+  }
+  
 #background-image{
     position: fixed;
     filter: brightness(30%) blur(5px);
@@ -12,6 +23,11 @@ body{
     height: 100%;
     background-image: url("images/background.jpg");
     background-size: cover;
+
+    animation-duration: 3s;
+    animation-name: rock;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 #main{
