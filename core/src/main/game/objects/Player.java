@@ -3,16 +3,16 @@ package main.game.objects;
 public class Player extends Entity {
 
     @Override
-    public void Update() {
+    public void update() {
     }
 
     @Override
-    public void Render() {
+    public void render() {
         
     }
 
     @Override
-    public void Dispose() {
+    public void dispose() {
         
     }
 }
