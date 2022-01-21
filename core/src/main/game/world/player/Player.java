@@ -1,4 +1,6 @@
-package main.game.objects;
+package main.game.world.player;
+
+import main.game.world.content.Entity;
 
 public class Player extends Entity {
 

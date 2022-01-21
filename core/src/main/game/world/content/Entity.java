@@ -1,4 +1,4 @@
-package main.game.objects;
+package main.game.world.content;
 
 import com.badlogic.gdx.physics.box2d.Transform;
 

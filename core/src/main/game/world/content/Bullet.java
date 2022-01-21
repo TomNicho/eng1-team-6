@@ -1,9 +1,9 @@
-package main.game.objects;
+package main.game.world.content;
 
-public class College extends Entity {
+public class Bullet extends Entity {
     @Override
     public void render() {
-
+        
     }
 
     @Override

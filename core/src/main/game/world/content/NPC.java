@@ -1,4 +1,4 @@
-package main.game.objects;
+package main.game.world.content;
 
 public class NPC extends Entity {
     @Override
