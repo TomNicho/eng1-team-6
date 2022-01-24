@@ -28,7 +28,7 @@ public class MainRunner extends ApplicationAdapter {
     @Override
     public void create() {
         worldMap = new TmxMapLoader().load("core/assets/tiles/libmpTest.tmx");
-        boat = new Texture(Gdx.files.internal("textures/boat.png"));
+        boat = new Texture(Gdx.files.internal("core/assets/textures/boat.png"));
 
         camera = new OrthographicCamera();
         batch = new SpriteBatch();

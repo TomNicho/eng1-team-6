@@ -15,7 +15,7 @@ public class DesktopLauncher {
         config.height = 720;
         config.foregroundFPS = 60;
         config.backgroundFPS = 60;
-        config.addIcon("icons/pirate_icon.png", FileType.Internal);
+        config.addIcon("core/assets/icons/pirate_icon.png", FileType.Internal);
         new LwjglApplication(new MainRunner(), config);
     }
 }
