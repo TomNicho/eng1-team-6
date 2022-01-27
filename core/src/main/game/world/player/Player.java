@@ -45,7 +45,7 @@ public class Player extends Entity {
     public void Shoot(){}
 
     public void RotateBy(float deg){
-        rotation += (deg / 2 * Math.PI);
+        rotation += (deg / (2 * Math.PI));
     }
     public Player(int health, float speed){
         boat = new Texture(Gdx.files.internal("core/assets/textures/boat.png"));
