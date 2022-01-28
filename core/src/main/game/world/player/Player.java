@@ -122,7 +122,7 @@ public class Player extends Entity {
     }
 
     public Vector2 getCenter() {
-        return new Vector2(sprite.getX() + sprite.getWidth() / 2, sprite.getY() + sprite.getHeight() / 2);
+        return Calculations.SpriteCenter(sprite);
     }
 
     public Sprite getSprite() {

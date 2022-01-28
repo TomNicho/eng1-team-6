@@ -35,7 +35,7 @@ public class World {
         //Read Input Files To::
         worldMap = new TmxMapLoader().load("./tiles/libmpTest.tmx");
 
-        player = new Player(100, new Vector2(400,400), 0);
+        player = new Player(100, new Vector2(0,0), 0);
         npcs = new HashSet<>();
         colleges = new HashSet<>();
         bullets = new HashSet<>();
@@ -58,16 +58,17 @@ public class World {
         //Render All Istances
         gather();
         process();
-        render();        
+        render();
     }
 
     private void gather() {
 
         //Update Player
         float bSPawn = player.update();
+        Vector2 playerCenter = player.getCenter();
 
         if (bSPawn != -1) {
-            bullets.add(new Bullet(player.getCenter(), bSPawn, Player.BULLET_SPEED, true));
+            bullets.add(new Bullet(player.getPosition(), bSPawn, Player.BULLET_SPEED, true));
         }
 
         Iterator<Bullet> bIterator = bullets.iterator();
@@ -91,7 +92,7 @@ public class World {
             if (Math.abs(Calculations.V2Magnitude(player.getPosition()) - Calculations.V2Magnitude(college.getPosition())) <= College.RANGE) {
                 if (college.update()) {
 
-                    double angle = -Math.atan2(college.getSprite().getY() - player.getSprite().getY(), college.getSprite().getX() - player.getSprite().getX()) - Math.PI / 2;
+                    double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y, college.getSprite().getX() - playerCenter.x) - Math.PI / 2;
                     bullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, false));
                 }
             }

@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import main.game.core.Calculations;
+
 public class Bullet extends Entity {
     public static final float RANGE = 500f;
 
@@ -54,5 +56,9 @@ public class Bullet extends Entity {
 
     public Rectangle getBounds() {
         return sprite.getBoundingRectangle();
+    }
+
+    public Vector2 getCenter() {
+        return Calculations.SpriteCenter(sprite);
     }
 }
