@@ -2,72 +2,130 @@ package main.game.world.player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import main.game.core.Calculations;
 import main.game.world.content.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 
 
 public class Player extends Entity {
+    public static final float SPEED = 100f;
+    public static final float FIRE_RATE = 500f;
+    public static final float BULLET_SPEED = 250f;
 
-    private Sprite sprite;
-    private int _health;
-    private float _speed;
-    private Vector2 position = new Vector2(0,0);
     private Texture boat;
-    private TextureRegion boatregion;
-    private float rotation = 0;
-    
-    public int GetHealth(){
-        return _health;
-    }
-    public float GetSpeed(){
-        return _speed;
-    }
-    public Sprite GetSprite(){
-        return sprite;
-    }
-    public Vector2 GetPosition(){
-        return position;
-    }
-    public Texture GetTexture(){
-        return boat;
-    }
-    public TextureRegion GetTextureRegion(){
-        return boatregion;
-    }
-    public float GetRotation(){
-        return rotation;
-    }
+    private Sprite sprite;
+
+    private int health;
+    private long lastShot;
 
     public void TakeDamage(){}
     public void Shoot(){}
 
-    public void RotateBy(float deg){
-        rotation += (deg / (2 * Math.PI));
-    }
-    public Player(int health, float speed){
+    public Player(int health, Vector2 initialPosition, float initialRotation){
+        this.health = health;
+        this.lastShot = TimeUtils.millis();
+
         boat = new Texture(Gdx.files.internal("core/assets/textures/boat.png"));
-        boatregion = new TextureRegion(boat);
         sprite = new Sprite(boat, 32, 64);
-        _health = health;
-        _speed = speed;
+
+        sprite.setPosition(initialPosition.x, initialPosition.y);
+        sprite.setRotation(initialRotation);
+    }
+
+    public float update() {
+        Vector2 position = new Vector2(0,0);
+        double rotX = 0, rotY = 0;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            position.x = -SPEED * Gdx.graphics.getDeltaTime();
+            rotX = Math.PI / 2;
+            rotY = Math.PI / 2;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            position.x = SPEED * Gdx.graphics.getDeltaTime();
+            rotX = 3 * Math.PI / 2;
+            rotY = 3 * Math.PI / 2;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            position.y = SPEED * Gdx.graphics.getDeltaTime();
+            if (rotX == 3 * Math.PI / 2) rotX = 2 * Math.PI;
+            else rotX = 0;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            position.y = -SPEED * Gdx.graphics.getDeltaTime();
+            rotY = Math.PI;
+            if (rotX == 0) rotX = Math.PI;
+        }
+
+        double rotation = (rotX + rotY) / 2;
+
+        sprite.translate(position.x, position.y);
+        sprite.setRotation((float) Calculations.RadToDeg(rotation));
+
+        if (TimeUtils.timeSinceMillis(lastShot) <= FIRE_RATE) {
+            return -1;
+        } else {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                lastShot = TimeUtils.millis();
+                return 0;
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                lastShot = TimeUtils.millis();
+                return (float) Math.PI / 2;
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                lastShot = TimeUtils.millis();
+                return (float) Math.PI;
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                lastShot = TimeUtils.millis();
+                return 3 * (float) Math.PI / 2;
+            }
+
+            return -1;
+        }
     }
 
     @Override
-    public void update() {
-    }
-
-    @Override
-    public void render() {
-        position = new Vector2(0,0);
+    public void render(SpriteBatch batch) {
+        sprite.draw(batch);
     }
 
     @Override
     public void dispose() {
-        
+        boat.dispose();
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public float getRotation() {
+        return sprite.getRotation();
+    }
+
+    public Vector2 getPosition() {
+        return new Vector2(sprite.getX(), sprite.getY());
+    }
+
+    public Vector2 getCenter() {
+        return new Vector2(sprite.getX() + sprite.getWidth() / 2, sprite.getY() + sprite.getHeight() / 2);
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public Rectangle getBounds() {
+        return sprite.getBoundingRectangle();
     }
 }

@@ -8,6 +8,10 @@ public class MainRunner extends ApplicationAdapter {
     
     private World world;
 
+    //Temp H & W until fullscreen cals
+    public static final float SCREEN_WIDTH = 1080;
+    public static final float SCREEN_HEIGHT = 720;
+
     @Override
     public void create() {
         world = new World();
