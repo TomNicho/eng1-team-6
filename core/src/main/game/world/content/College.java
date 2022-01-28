@@ -22,7 +22,7 @@ public class College extends Entity {
         this.health = health;
         this.name = name;
 
-        collegeTexture = new Texture("textures/college.png");
+        collegeTexture = new Texture("core/assets/textures/college.png");
         collegeSprite = new Sprite(collegeTexture);
 
         collegeSprite.setPosition(position.x, position.y);

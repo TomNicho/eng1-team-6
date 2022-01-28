@@ -11,6 +11,7 @@ import main.game.core.Calculations;
 
 public class Bullet extends Entity {
     public static final float RANGE = 500f;
+    public static final int damage = 10;
 
     private Texture texture;
     private Sprite sprite;
@@ -19,7 +20,7 @@ public class Bullet extends Entity {
     public final boolean player;
 
     public Bullet(Vector2 position, float rotation, float bulletSpeed, boolean player) {
-        this.texture = new Texture(Gdx.files.internal("./textures/bullet.png"));
+        this.texture = new Texture(Gdx.files.internal("core/assets/textures/bullet.png"));
         this.sprite = new Sprite(texture);
         this.bulletSpeed = bulletSpeed;
         this.origin = position;

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.core.Calculations;
@@ -33,7 +34,7 @@ public class World {
 
     public World() {
         //Read Input Files To::
-        worldMap = new TmxMapLoader().load("./tiles/libmpTest.tmx");
+        worldMap = new TmxMapLoader().load("core/assets/tiles/libmpTest.tmx");
 
         player = new Player(100, new Vector2(0,0), 0);
         npcs = new HashSet<>();
@@ -71,8 +72,16 @@ public class World {
             bullets.add(new Bullet(player.getPosition(), bSPawn, Player.BULLET_SPEED, true));
         }
 
-        Iterator<Bullet> bIterator = bullets.iterator();
+        
 
+        //check for bullet collision
+        for(Bullet b : bullets){
+            if(Intersector.intersectRectangles(b.getBounds(), player.getBounds(),b.getBounds())){
+                player.takeDamage(Bullet.damage);
+                bullets.remove(b);
+            }
+        }
+        Iterator<Bullet> bIterator = bullets.iterator();
         while (bIterator.hasNext()) {
             Bullet bullet = bIterator.next();
 

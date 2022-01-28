@@ -105,8 +105,11 @@ public class Player extends Entity {
         boat.dispose();
     }
 
-    public void takeDamage() {
-
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if(this.health <= 0){
+            Gdx.app.exit();
+        }
     }
 
     public int getHealth() {
