@@ -46,6 +46,8 @@ public class World {
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
 
+        colleges.add(new College(1000, "James", new Vector2(100,100)));
+
         gameCamera.setToOrtho(false, 1080, 720);
         uiCamera.setToOrtho(false);
     }
@@ -73,21 +75,27 @@ public class World {
         while (bIterator.hasNext()) {
             Bullet bullet = bIterator.next();
 
-            if (Math.abs(Calculations.V2Magnitude(bullet.getOrigin()) - Calculations.V2Magnitude(bullet.getPosition())) > Bullet.BULLET_RANGE) {
+            if (Math.abs(Calculations.V2Magnitude(bullet.getOrigin()) - Calculations.V2Magnitude(bullet.getPosition())) > Bullet.RANGE) {
                 bullet.dispose();
                 bIterator.remove();
-            } 
+            } else {
+                bullet.update();
+            }
         }
 
-        // //Update NPCS
-        // for (NPC npc : npcs) {
-        //     npc.update();
-        // }
+        Iterator<College> cIterator = colleges.iterator();
 
-        // //Update Colleges
-        // for (College college : colleges) {
-        //     college.update();
-        // }
+        while (cIterator.hasNext()) {
+            College college = cIterator.next();
+
+            if (Math.abs(Calculations.V2Magnitude(player.getPosition()) - Calculations.V2Magnitude(college.getPosition())) <= College.RANGE) {
+                if (college.update()) {
+
+                    double angle = -Math.atan2(college.getSprite().getY() - player.getSprite().getY(), college.getSprite().getX() - player.getSprite().getX()) - Math.PI / 2;
+                    bullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, false));
+                }
+            }
+        }
     }
 
     private void process() {

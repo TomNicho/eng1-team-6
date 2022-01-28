@@ -105,6 +105,10 @@ public class Player extends Entity {
         boat.dispose();
     }
 
+    public void takeDamage() {
+
+    }
+
     public int getHealth() {
         return health;
     }

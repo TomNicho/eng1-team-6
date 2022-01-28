@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends Entity {
-    public static final float BULLET_RANGE = 500f;
+    public static final float RANGE = 500f;
 
     private Texture texture;
     private Sprite sprite;
