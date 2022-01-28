@@ -1,10 +1,15 @@
 package main.game.world.content;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import main.game.world.World;
+
+import com.badlogic.gdx.math.Rectangle;
 
 public class College extends Entity {
     public static final float FIRE_RATE = 1000f;
@@ -54,6 +59,8 @@ public class College extends Entity {
 
         if (health <= 0) {
             //DO SOMETHING
+            // World.colleges.remodve(this);
+            Gdx.app.exit();
         }
     }
 
@@ -72,8 +79,11 @@ public class College extends Entity {
     public Vector2 getPosition() {
         return new Vector2(collegeSprite.getX(), collegeSprite.getY());
     }
-
+    public Rectangle getBounds() {
+        return collegeSprite.getBoundingRectangle();
+    }
     public Sprite getSprite() {
         return collegeSprite;
     }
+    
 }

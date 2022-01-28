@@ -72,16 +72,8 @@ public class World {
             bullets.add(new Bullet(player.getPosition(), bSPawn, Player.BULLET_SPEED, true));
         }
 
-        
-
-        //check for bullet collision
-        for(Bullet b : bullets){
-            if(Intersector.intersectRectangles(b.getBounds(), player.getBounds(),b.getBounds())){
-                player.takeDamage(Bullet.damage);
-                bullets.remove(b);
-            }
-        }
         Iterator<Bullet> bIterator = bullets.iterator();
+        Iterator<College> cInterIterator = colleges.iterator();
         while (bIterator.hasNext()) {
             Bullet bullet = bIterator.next();
 
@@ -91,10 +83,30 @@ public class World {
             } else {
                 bullet.update();
             }
+
+            //bullet intersection player (take damage)
+            if(Intersector.intersectRectangles(bullet.getBounds(), player.getBounds(),bullet.getBounds())){
+                if(bullet.player == false){
+                    player.takeDamage(Bullet.damage);
+                    bullet.dispose();
+                    bIterator.remove();
+                }
+            }
+            //bullet intersection player (give damage)
+            while (cInterIterator.hasNext()) {
+                College college = cInterIterator.next();
+                if(Intersector.intersectRectangles(bullet.getBounds(), college.getBounds(),bullet.getBounds())){
+                    if(bullet.player == true){
+                        college.takeDamage(250);
+                        bullet.dispose();
+                        bIterator.remove();
+                    }
+                }
+            }
         }
 
+        
         Iterator<College> cIterator = colleges.iterator();
-
         while (cIterator.hasNext()) {
             College college = cIterator.next();
 
@@ -105,6 +117,7 @@ public class World {
                     bullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, false));
                 }
             }
+           
         }
     }
 
