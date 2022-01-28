@@ -25,9 +25,6 @@ public class Player extends Entity {
     private int health;
     private long lastShot;
 
-    public void TakeDamage(){}
-    public void Shoot(){}
-
     public Player(int health, Vector2 initialPosition, float initialRotation){
         this.health = health;
         this.lastShot = TimeUtils.millis();
@@ -107,8 +104,7 @@ public class Player extends Entity {
 
     public void takeDamage(int damage) {
         this.health -= damage;
-        if(this.health <= 0){
-            Gdx.app.exit();
+        if(this.health <= 0) {
         }
     }
 
