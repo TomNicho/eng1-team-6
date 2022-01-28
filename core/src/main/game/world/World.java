@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.core.Calculations;
@@ -73,34 +72,23 @@ public class World {
         }
 
         Iterator<Bullet> bIterator = bullets.iterator();
-        Iterator<College> cInterIterator = colleges.iterator();
         while (bIterator.hasNext()) {
             Bullet bullet = bIterator.next();
 
             if (Math.abs(Calculations.V2Magnitude(bullet.getOrigin()) - Calculations.V2Magnitude(bullet.getPosition())) > Bullet.RANGE) {
                 bullet.dispose();
                 bIterator.remove();
+                continue;
             } else {
                 bullet.update();
             }
 
             //bullet intersection player (take damage)
-            if(Intersector.intersectRectangles(bullet.getBounds(), player.getBounds(),bullet.getBounds())){
-                if(bullet.player == false){
+            if(bullet.player == false) {
+                if(player.getBounds().contains(bullet.getBounds())) {
                     player.takeDamage(Bullet.damage);
                     bullet.dispose();
                     bIterator.remove();
-                }
-            }
-            //bullet intersection player (give damage)
-            while (cInterIterator.hasNext()) {
-                College college = cInterIterator.next();
-                if(Intersector.intersectRectangles(bullet.getBounds(), college.getBounds(),bullet.getBounds())){
-                    if(bullet.player == true){
-                        college.takeDamage(250);
-                        bullet.dispose();
-                        bIterator.remove();
-                    }
                 }
             }
         }
@@ -115,6 +103,18 @@ public class World {
 
                     double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y, college.getSprite().getX() - playerCenter.x) - Math.PI / 2;
                     bullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, false));
+                }
+
+                Iterator<Bullet> bcIterator = bullets.iterator();
+                while (bcIterator.hasNext()) {
+                    Bullet b = bcIterator.next();
+                    if(b.player == true) {
+                        if (college.getBounds().contains(b.getBounds())) {
+                            college.takeDamage(250);
+                            b.dispose();
+                            bcIterator.remove();
+                        }
+                    }
                 }
             }
            
@@ -133,7 +133,6 @@ public class World {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // mapRenderer.render();
-
         batch.begin();
         player.render(batch);
 
