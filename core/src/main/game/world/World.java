@@ -12,7 +12,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
-import main.game.core.Calculations;
 import main.game.world.content.Bullet;
 import main.game.world.content.College;
 import main.game.world.content.NPC;
@@ -24,7 +23,8 @@ public class World {
     private IGUI inGameUI;
     private Set<NPC> npcs;
     private Set<College> colleges;
-    private Set<Bullet> bullets;
+    private Set<Bullet> eBullets;
+    private Set<Bullet> pBullets;
 
     private TiledMap worldMap;
     // private TiledMapRenderer mapRenderer;
@@ -38,8 +38,10 @@ public class World {
         player = new Player(100, new Vector2(0,0), 0);
         npcs = new HashSet<>();
         colleges = new HashSet<>();
-        bullets = new HashSet<>();
+        eBullets = new HashSet<>();
+        pBullets = new HashSet<>();
         inGameUI = new IGUI();
+
         // mapRenderer = new OrthogonalTiledMapRenderer(worldMap);
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -47,85 +49,129 @@ public class World {
         uiBatch = new SpriteBatch();
 
         colleges.add(new College(1000, "James", new Vector2(100,100)));
+        npcs.add(new NPC(500, new Vector2(-100,-100), 235));
 
         gameCamera.setToOrtho(false, 1080, 720);
         uiCamera.setToOrtho(false);
     }
 
-    public void update() {
+    public void worldCycle() {
         //Update All Instances of World
         //Process All Information Returned from update
         //Render All Istances
-        gather();
+        update();
         process();
         render();
     }
 
-    private void gather() {
+    private void update() {
 
         //Update Player
         float bSPawn = player.update();
         Vector2 playerCenter = player.getCenter();
 
         if (bSPawn != -1) {
-            bullets.add(new Bullet(player.getPosition(), bSPawn, Player.BULLET_SPEED, true));
+            pBullets.add(new Bullet(player.getPosition(), bSPawn, Player.BULLET_SPEED, 50));
         }
 
-        Iterator<Bullet> bIterator = bullets.iterator();
-        while (bIterator.hasNext()) {
-            Bullet bullet = bIterator.next();
+        Iterator<Bullet> beIterator = eBullets.iterator();
+        while (beIterator.hasNext()) {
+            Bullet bullet = beIterator.next();
 
-            if (Math.abs(Calculations.V2Magnitude(bullet.getOrigin()) - Calculations.V2Magnitude(bullet.getPosition())) > Bullet.RANGE) {
+            if (bullet.update() == 0) {
                 bullet.dispose();
-                bIterator.remove();
+                beIterator.remove();
                 continue;
-            } else {
-                bullet.update();
             }
+        }
 
-            //bullet intersection player (take damage)
-            if(bullet.player == false) {
-                if(player.getBounds().contains(bullet.getBounds())) {
-                    player.takeDamage(Bullet.damage);
-                    bullet.dispose();
-                    bIterator.remove();
+        Iterator<Bullet> bpIterator = pBullets.iterator();
+        while (bpIterator.hasNext()) {
+            Bullet bullet = bpIterator.next();
+
+            if (bullet.update() == 0) {
+                bullet.dispose();
+                bpIterator.remove();
+            }
+        }
+
+        Iterator<College> cIterable = colleges.iterator();
+        while (cIterable.hasNext()) {
+            College college = cIterable.next();
+
+            if (college.inProcess(playerCenter)) {
+                int cRet = college.update();
+
+                if (cRet == 0) {
+                    college.dispose();
+                    cIterable.remove();
+                } else if (cRet == 2 && college.inRange(playerCenter)) {
+                    double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y, college.getSprite().getX() - playerCenter.x) - Math.PI / 2;
+                    eBullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, 10));
                 }
             }
         }
 
-        
-        Iterator<College> cIterator = colleges.iterator();
-        while (cIterator.hasNext()) {
-            College college = cIterator.next();
+        Iterator<NPC> nIterator = npcs.iterator();
+        while (nIterator.hasNext()) {
+            NPC npc = nIterator.next();
 
-            if (Math.abs(Calculations.V2Magnitude(player.getPosition()) - Calculations.V2Magnitude(college.getPosition())) <= College.RANGE) {
-                if (college.update()) {
-
-                    double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y, college.getSprite().getX() - playerCenter.x) - Math.PI / 2;
-                    bullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, false));
-                }
-
-                Iterator<Bullet> bcIterator = bullets.iterator();
-                while (bcIterator.hasNext()) {
-                    Bullet b = bcIterator.next();
-                    if(b.player == true) {
-                        if (college.getBounds().contains(b.getBounds())) {
-                            college.takeDamage(250);
-                            b.dispose();
-                            bcIterator.remove();
-                        }
-                    }
-                }
+            if (npc.update() == 0) {
+                npc.dispose();
+                nIterator.remove();
             }
-           
         }
     }
 
     private void process() {
-        // mapRenderer.setView(gameCamera);
+
+        collisions();
+
+        // Update Both Cameras
         batch.setProjectionMatrix(gameCamera.combined);
         uiBatch.setProjectionMatrix(uiCamera.combined);
         gameCamera.position.set(player.getPosition(), gameCamera.position.z);
+        gameCamera.update();
+    }
+
+    private void collisions() {
+        Vector2 playerCenter = player.getCenter();
+
+        //Process enemy bullets towards the Player
+        for (Bullet eb : eBullets) {
+            if (player.getBounds().overlaps(eb.getBounds())) {
+                eb.hit();
+                player.takeDamage(eb.getDamage());
+            }
+        }
+
+        //Process player bullets for NPCs and Colleges
+        for (Bullet pb : pBullets) {
+            boolean collided = false;
+
+            for (College c : colleges) {
+                if (c.inProcess(playerCenter)) {
+                    if (c.getBounds().overlaps(pb.getBounds())) {
+                        pb.hit();
+                        c.takeDamage(pb.getDamage());
+                        collided = true;
+                        break;
+                    }
+                }
+            }
+
+            if (collided) continue;
+
+            for (NPC n : npcs) {
+                if (n.inProcess(playerCenter)) {
+                    if (n.getBounds().overlaps(pb.getBounds())) {
+                        pb.hit();
+                        n.takeDamage(pb.getDamage());
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void render() {
@@ -144,7 +190,11 @@ public class World {
             college.render(batch);
         }
 
-        for (Bullet bullet : bullets) {
+        for (Bullet bullet : eBullets) {
+            bullet.render(batch);
+        }
+
+        for (Bullet bullet : pBullets) {
             bullet.render(batch);
         }
 
@@ -154,8 +204,6 @@ public class World {
         uiBatch.begin();
         inGameUI.draw(uiBatch, player.getPosition());
         uiBatch.end();
-
-        gameCamera.update();
     }
 
     public void dispose() {
@@ -171,7 +219,11 @@ public class World {
             college.dispose();
         }
 
-        for (Bullet bullet : bullets) {
+        for (Bullet bullet : eBullets) {
+            bullet.dispose();
+        }
+
+        for (Bullet bullet : pBullets) {
             bullet.dispose();
         }
 

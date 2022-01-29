@@ -11,16 +11,17 @@ import com.badlogic.gdx.math.Rectangle;
 public class College extends Entity {
     public static final float FIRE_RATE = 1000f;
     public static final float RANGE = 500f;
+    public static final float PROCESS_RANGE = 1000f;
     public static final float BULLET_SPEED = 250f;
 
     private Texture collegeTexture;
     private Sprite collegeSprite;
-    private float health;
+    private int health;
     private String name;
 
     private long lastShot;
 
-    public College(float health, String name, Vector2 position) {
+    public College(int health, String name, Vector2 position) {
         this.health = health;
         this.name = name;
 
@@ -32,13 +33,13 @@ public class College extends Entity {
         lastShot = TimeUtils.millis();
     }
 
-    public boolean update() {
+    public int update() {
+        if (this.health < 0) return 0;
         if (TimeUtils.timeSinceMillis(lastShot) > FIRE_RATE) {
             lastShot = TimeUtils.millis();
-            return true;
+            return 2;
         }
-
-        return false;
+        return 1;
     }
 
     @Override
@@ -51,19 +52,15 @@ public class College extends Entity {
         collegeTexture.dispose();
     }
 
-    public void takeDamage(float damage) {
+    public void takeDamage(int damage) {
         health -= damage;
-
-        if (health <= 0) {
-            //DO SOMETHING
-        }
     }
 
     public void shoot() {
 
     }
 
-    public float getHealth() {
+    public int getHealth() {
         return health;
     }
 
@@ -74,11 +71,22 @@ public class College extends Entity {
     public Vector2 getPosition() {
         return new Vector2(collegeSprite.getX(), collegeSprite.getY());
     }
+    
     public Rectangle getBounds() {
         return collegeSprite.getBoundingRectangle();
     }
+
     public Sprite getSprite() {
         return collegeSprite;
     }
-    
+
+    public boolean inRange(Vector2 pos) {
+        if (pos.dst(this.getPosition()) <= RANGE) return true;
+        else return false;
+    }
+
+    public boolean inProcess(Vector2 pos) {
+        if (pos.dst(this.getPosition()) <= PROCESS_RANGE) return true;
+        else return false;
+    }
 }

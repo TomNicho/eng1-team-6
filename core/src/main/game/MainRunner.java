@@ -19,7 +19,7 @@ public class MainRunner extends ApplicationAdapter {
 
     @Override 
     public void render() {
-        world.update();
+        world.worldCycle();
     }
 
     @Override

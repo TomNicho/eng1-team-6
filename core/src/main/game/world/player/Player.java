@@ -3,7 +3,11 @@ package main.game.world.player;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import main.game.core.Calculations;
+import main.game.world.content.Bullet;
 import main.game.world.content.Entity;
+
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +25,7 @@ public class Player extends Entity {
 
     private Texture boat;
     private Sprite sprite;
+    private Set<Bullet> playerBullets;
 
     private int health;
     private long lastShot;
@@ -130,5 +135,9 @@ public class Player extends Entity {
 
     public Rectangle getBounds() {
         return sprite.getBoundingRectangle();
+    }
+
+    public Set<Bullet> getBullets() {
+        return playerBullets;
     }
 }
