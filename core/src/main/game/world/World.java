@@ -18,6 +18,14 @@ import main.game.world.content.NPC;
 import main.game.world.player.Player;
 import main.game.world.ui.IGUI;
 
+import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;  
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 public class World {
     private Player player;
     private IGUI inGameUI;
@@ -34,6 +42,7 @@ public class World {
     public World() {
         //Read Input Files To::
         worldMap = new TmxMapLoader().load("core/assets/tiles/libmpTest.tmx");
+        File xmlfile = new File("core/assets/entities.xml");
 
         player = new Player(100, new Vector2(0,0), 0);
         npcs = new HashSet<>();
@@ -48,8 +57,35 @@ public class World {
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
 
-        colleges.add(new College(1000, "James", new Vector2(100,100)));
-        npcs.add(new NPC(500, new Vector2(-100,-100), 235));
+        //Generate npc and college objects using XML data
+        try{
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(xmlfile);
+            NodeList xmlcolleges = document.getElementsByTagName("college");
+            NodeList xmlnpcs = document.getElementsByTagName("npc");
+            for (int i = 0; i < xmlnpcs.getLength(); i++){
+                Node npcNode = xmlnpcs.item(i);
+                Element npcElement = (Element) npcNode;
+                int npcElementHealth = Integer.parseInt(npcElement.getElementsByTagName("health").item(0).getTextContent());
+                int npcElementX = Integer.parseInt(npcElement.getElementsByTagName("x").item(0).getTextContent());
+                int npcElementY = Integer.parseInt(npcElement.getElementsByTagName("y").item(0).getTextContent());
+                int npcElementRotation = Integer.parseInt(npcElement.getElementsByTagName("rotation").item(0).getTextContent());
+                npcs.add(new NPC(npcElementHealth, new Vector2(npcElementX, npcElementY), npcElementRotation));
+            }
+            for (int i = 0; i < xmlcolleges.getLength(); i++){
+                Node collegeNode = xmlcolleges.item(i);
+                Element collegeElement = (Element) collegeNode;
+                int collegeElementHealth = Integer.parseInt(collegeElement.getElementsByTagName("health").item(0).getTextContent());
+                int collegeElementX = Integer.parseInt(collegeElement.getElementsByTagName("x").item(0).getTextContent());
+                int collegeElementY = Integer.parseInt(collegeElement.getElementsByTagName("y").item(0).getTextContent());
+                String collegeElementName = collegeElement.getElementsByTagName("name").item(0).getTextContent();
+                colleges.add(new College(collegeElementHealth, collegeElementName, new Vector2(collegeElementX, collegeElementY)));
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
 
         gameCamera.setToOrtho(false, 1080, 720);
         uiCamera.setToOrtho(false);
