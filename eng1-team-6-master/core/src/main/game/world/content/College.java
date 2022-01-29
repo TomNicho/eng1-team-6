@@ -1,44 +1,84 @@
 package main.game.world.content;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
+
+import com.badlogic.gdx.math.Rectangle;
 
 public class College extends Entity {
-    private int health;
-    private Texture college = new Texture(Gdx.files.internal("textures/college.png"));
+    public static final float FIRE_RATE = 1000f;
+    public static final float RANGE = 500f;
+    public static final float BULLET_SPEED = 250f;
 
-    @Override
-    public void render() {
+    private Texture collegeTexture;
+    private Sprite collegeSprite;
+    private float health;
+    private String name;
 
+    private long lastShot;
+
+    public College(float health, String name, Vector2 position) {
+        this.health = health;
+        this.name = name;
+
+        collegeTexture = new Texture("core/assets/textures/college.png");
+        collegeSprite = new Sprite(collegeTexture);
+
+        collegeSprite.setPosition(position.x, position.y);
+        collegeSprite.setRotation(0);
+        lastShot = TimeUtils.millis();
     }
 
-    
+    public boolean update() {
+        if (TimeUtils.timeSinceMillis(lastShot) > FIRE_RATE) {
+            lastShot = TimeUtils.millis();
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
-    public void update() {
-        
+    public void render(SpriteBatch batch) {
+        collegeSprite.draw(batch);
     }
 
     @Override
     public void dispose() {
-        
+        collegeTexture.dispose();
     }
 
-    private void takeDamage() {
+    public void takeDamage(float damage) {
+        health -= damage;
+
+        if (health <= 0) {
+            //DO SOMETHING
+        }
+    }
+
+    public void shoot() {
 
     }
 
-    private void shoot() {
-
+    public float getHealth() {
+        return health;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Vector2 getPosition() {
+        return new Vector2(collegeSprite.getX(), collegeSprite.getY());
+    }
+    public Rectangle getBounds() {
+        return collegeSprite.getBoundingRectangle();
+    }
+    public Sprite getSprite() {
+        return collegeSprite;
+    }
+    
 }
