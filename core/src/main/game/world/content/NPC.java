@@ -57,4 +57,5 @@ public class NPC extends Entity {
         return Calculations.SpriteCenter(sprite);
     }
     
+    
 }
