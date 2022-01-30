@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Transform;
 public abstract class Entity {
     public Transform transform;
 
+    public abstract int update();
     public abstract void render(SpriteBatch batch);
     public abstract void dispose();
 }

@@ -2,6 +2,7 @@ package main.game.world.player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import main.game.GameRunner;
 import main.game.core.Calculations;
 import main.game.world.content.Bullet;
 import main.game.world.content.Entity;
@@ -15,8 +16,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
-
-
 
 public class Player extends Entity {
     public static final float SPEED = 100f;
@@ -41,7 +40,7 @@ public class Player extends Entity {
         sprite.setRotation(initialRotation);
     }
 
-    public float update() {
+    public int update() {
         Vector2 position = new Vector2(0,0);
         double rotX = 0, rotY = 0;
 
@@ -80,17 +79,17 @@ public class Player extends Entity {
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 lastShot = TimeUtils.millis();
-                return (float) Math.PI / 2;
+                return 90;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 lastShot = TimeUtils.millis();
-                return (float) Math.PI;
+                return 180;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 lastShot = TimeUtils.millis();
-                return 3 * (float) Math.PI / 2;
+                return 270;
             }
 
             return -1;
@@ -110,6 +109,7 @@ public class Player extends Entity {
     public void takeDamage(int damage) {
         this.health -= damage;
         if(this.health <= 0) {
+            GameRunner.IS_MENU = true;
         }
     }
 

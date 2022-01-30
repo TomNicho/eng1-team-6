@@ -33,7 +33,7 @@ public class World {
 
     public World() {
         //Read Input Files To::
-        worldMap = new TmxMapLoader().load("core/assets/tiles/libmpTest.tmx");
+        worldMap = new TmxMapLoader().load("tiles/libmpTest.tmx");
 
         player = new Player(100, new Vector2(0,0), 0);
         npcs = new HashSet<>();
