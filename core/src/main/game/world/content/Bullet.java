@@ -20,7 +20,7 @@ public class Bullet extends Entity {
     private int damage;
 
     public Bullet(Vector2 position, float rotation, float bulletSpeed, int damage) {
-        this.texture = new Texture(Gdx.files.internal("core/assets/textures/bullet.png"));
+        this.texture = new Texture(Gdx.files.internal("textures/bullet.png"));
         this.sprite = new Sprite(texture);
         this.bulletSpeed = bulletSpeed;
         this.origin = position;
