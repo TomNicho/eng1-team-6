@@ -8,24 +8,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.core.Calculations;
 import main.game.core.Constants;
+import main.game.core.XMLLoader;
 import main.game.core.Constants.*;
 import main.game.world.content.*;
 import main.game.world.player.Player;
 import main.game.world.ui.IGUI;
-
-import java.io.File;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;  
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class World {
     private Player player;
@@ -35,58 +26,32 @@ public class World {
     private Set<Bullet> eBullets;
     private Set<Bullet> pBullets;
 
-    private TiledMap worldMap;
-    // private TiledMapRenderer mapRenderer;
     private OrthographicCamera gameCamera, uiCamera;
     private SpriteBatch batch, uiBatch;
 
     public World() {
-        //Read Input Files To::
-        worldMap = new TmxMapLoader().load("core/assets/tiles/libmpTest.tmx");
-        File xmlfile = new File("core/assets/entities.xml");
+        // Create XMLLoader to load input files
+        XMLLoader loader = new XMLLoader("core/assets/entities.xml");
+
+        try {
+            //Read input file and initalize variables
+            loader.load();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         player = new Player(100, 100, new Vector2(0,0), 0);
-        npcs = new HashSet<>();
-        colleges = new HashSet<>();
+        npcs = loader.getNpcs();
+        colleges = loader.getColleges();
         eBullets = new HashSet<>();
         pBullets = new HashSet<>();
         inGameUI = new IGUI();
 
-        // mapRenderer = new OrthogonalTiledMapRenderer(worldMap);
+        //Generate npc and college objects using XML data
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
-
-        //Generate npc and college objects using XML data
-        try{
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(xmlfile);
-            NodeList xmlcolleges = document.getElementsByTagName("college");
-            NodeList xmlnpcs = document.getElementsByTagName("npc");
-            for (int i = 0; i < xmlnpcs.getLength(); i++){
-                Node npcNode = xmlnpcs.item(i);
-                Element npcElement = (Element) npcNode;
-                int npcElementHealth = Integer.parseInt(npcElement.getElementsByTagName("health").item(0).getTextContent());
-                int npcElementX = Integer.parseInt(npcElement.getElementsByTagName("x").item(0).getTextContent());
-                int npcElementY = Integer.parseInt(npcElement.getElementsByTagName("y").item(0).getTextContent());
-                int npcElementRotation = Integer.parseInt(npcElement.getElementsByTagName("rotation").item(0).getTextContent());
-                npcs.add(new NPC(npcElementHealth, new Vector2(npcElementX, npcElementY), npcElementRotation));
-            }
-            for (int i = 0; i < xmlcolleges.getLength(); i++){
-                Node collegeNode = xmlcolleges.item(i);
-                Element collegeElement = (Element) collegeNode;
-                int collegeElementHealth = Integer.parseInt(collegeElement.getElementsByTagName("health").item(0).getTextContent());
-                int collegeElementX = Integer.parseInt(collegeElement.getElementsByTagName("x").item(0).getTextContent());
-                int collegeElementY = Integer.parseInt(collegeElement.getElementsByTagName("y").item(0).getTextContent());
-                String collegeElementName = collegeElement.getElementsByTagName("name").item(0).getTextContent();
-                colleges.add(new College(collegeElementHealth, collegeElementName, new Vector2(collegeElementX, collegeElementY)));
-            }
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
 
         gameCamera.setToOrtho(false);
         uiCamera.setToOrtho(false);
@@ -312,7 +277,6 @@ public class World {
         player.dispose();
         batch.dispose();
         uiBatch.dispose();
-        worldMap.dispose();
         inGameUI.dispose();
     }
 }

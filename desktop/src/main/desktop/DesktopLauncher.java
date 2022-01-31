@@ -14,9 +14,9 @@ public class DesktopLauncher {
         config.foregroundFPS = 60;
         config.backgroundFPS = 60;
         config.vSyncEnabled = true;
-        config.width = 1080;
+        config.width = 1280;
         config.height = 720;
-        config.fullscreen = true;
+        // config.fullscreen = true;
         config.addIcon("icons/pirate_icon.png", FileType.Internal);
         new LwjglApplication(new GameRunner(), config);
     }
