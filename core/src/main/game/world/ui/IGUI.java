@@ -37,8 +37,8 @@ public class IGUI {
         objectiveName = new Label("CURRENT OBJECTIVE", basicStyle);
         objectiveValue = new Label("CURRENT OBJECTIVE", basicStyle);
 
-        compassTexture = new Texture(Gdx.files.internal("textures/compass.png"));
-        needlTexture = new Texture(Gdx.files.internal("textures/needle.png"));
+        compassTexture = new Texture(Gdx.files.internal("textures/compass3.png"));
+        needlTexture = new Texture(Gdx.files.internal("textures/needle2.png"));
         compass = new Sprite(compassTexture);
         needle = new Sprite(needlTexture);
 
