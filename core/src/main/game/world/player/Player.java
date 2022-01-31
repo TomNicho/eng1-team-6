@@ -2,7 +2,7 @@ package main.game.world.player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import main.game.GameRunner;
+import main.game.MainRunner;
 import main.game.core.Calculations;
 import main.game.core.Constants;
 import main.game.core.Constants.PlayerConstants;
@@ -149,7 +149,7 @@ public class Player extends Entity {
 
     public void takeDamage(int damage, Vector2 origin) {
         if (!immune) {
-            if (stats.takeDamage(damage)) GameRunner.IS_MENU = true;
+            if (stats.takeDamage(damage)) MainRunner.IS_MENU = true;
             else collided(origin);
         }
     }

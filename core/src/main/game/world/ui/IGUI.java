@@ -2,13 +2,16 @@ package main.game.world.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 
+import main.game.core.Calculations;
 import main.game.world.player.Player;
 import main.game.world.player.Objectives.Objective;
 
@@ -16,6 +19,8 @@ public class IGUI {
     private static final int PAGE_OFFSET_X = 10;
     private static final int PAGE_OFFSET_Y = 10;
 
+    private Texture compassTexture, needlTexture;
+    private Sprite compass, needle;
     private BitmapFont font;
     private LabelStyle basicStyle;
     private Label position, xp, level, gold, score, health, objectiveName, objectiveValue;
@@ -32,13 +37,21 @@ public class IGUI {
         objectiveName = new Label("CURRENT OBJECTIVE", basicStyle);
         objectiveValue = new Label("CURRENT OBJECTIVE", basicStyle);
 
+        compassTexture = new Texture(Gdx.files.internal("textures/compass.png"));
+        needlTexture = new Texture(Gdx.files.internal("textures/needle.png"));
+        compass = new Sprite(compassTexture);
+        needle = new Sprite(needlTexture);
+
         score.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y - xp.getHeight());
         xp.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - xp.getHeight() - score.getHeight());
         level.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - xp.getHeight() - score.getHeight() - level.getHeight());
         gold.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 4 - xp.getHeight() - score.getHeight() - level.getHeight() - gold.getHeight());
         
-        objectiveValue.setPosition(Gdx.graphics.getWidth() - objectiveValue.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() * 0.75f);
-        objectiveName.setPosition(Gdx.graphics.getWidth() - objectiveName.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() * 0.75f - PAGE_OFFSET_Y - objectiveValue.getHeight());
+        compass.setSize(160, 160);
+        compass.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
+        needle.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
+        objectiveValue.setPosition(Gdx.graphics.getWidth() - objectiveValue.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - compass.getHeight() - objectiveValue.getHeight());
+        objectiveName.setPosition(Gdx.graphics.getWidth() - objectiveName.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - compass.getHeight() - objectiveValue.getHeight() - objectiveName.getHeight());
 
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
         health.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y * 2 + position.getHeight());
@@ -61,6 +74,8 @@ public class IGUI {
         health.draw(batch, parentAlpha);
         objectiveName.draw(batch, parentAlpha);
         objectiveValue.draw(batch, parentAlpha);
+        compass.draw(batch);
+        needle.draw(batch);
     }
 
     private void setTexts(Player player) {
@@ -76,9 +91,15 @@ public class IGUI {
 
         Objective cObjective = player.getCurrentObjective();
         if (cObjective != null) {
+            Vector2 objectivePosition = cObjective.getLocation();
+
+            //Set Needle Rotation
+            double angle = Math.atan2(playerPosition.y - objectivePosition.y, playerPosition.x - objectivePosition.x) + Math.PI / 2;
+            needle.setRotation((float) Calculations.RadToDeg(angle));
             objectiveValue.setText(String.format("%s / %s - %sXP", cObjective.getCount(), cObjective.getAmount(), cObjective.getXp()));
             objectiveName.setText(String.format("%s", cObjective.getName()));
         } else {
+            needle.setRotation(0);
             objectiveValue.setText("1 / 1 - 0XP");
             objectiveName.setText("NO OBJECTIVE");
         }
@@ -86,5 +107,7 @@ public class IGUI {
 
     public void dispose() {
         font.dispose();
+        compassTexture.dispose();
+        needlTexture.dispose();
     }
 }

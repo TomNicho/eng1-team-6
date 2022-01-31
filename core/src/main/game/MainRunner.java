@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import main.game.menu.MenuUI;
 import main.game.world.World;
 
-public class GameRunner extends ApplicationAdapter {   
+public class MainRunner extends ApplicationAdapter {   
     //Temp H & W until fullscreen cals
     public static boolean IS_MENU = true, CLOSING = false;
     

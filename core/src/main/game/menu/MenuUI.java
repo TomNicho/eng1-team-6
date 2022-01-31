@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import main.game.GameRunner;
+import main.game.MainRunner;
 
 public class MenuUI {
     private Stage stage;
@@ -36,9 +36,9 @@ public class MenuUI {
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-            GameRunner.IS_MENU = false;
+            MainRunner.IS_MENU = false;
         } else if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-            GameRunner.CLOSING = true;
+            MainRunner.CLOSING = true;
         }
 
         stage.act(delta);

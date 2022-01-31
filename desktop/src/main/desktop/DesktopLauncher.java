@@ -4,7 +4,7 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import main.game.GameRunner;
+import main.game.MainRunner;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
@@ -18,6 +18,6 @@ public class DesktopLauncher {
         config.height = 720;
         // config.fullscreen = true;
         config.addIcon("icons/pirate_icon.png", FileType.Internal);
-        new LwjglApplication(new GameRunner(), config);
+        new LwjglApplication(new MainRunner(), config);
     }
 }
