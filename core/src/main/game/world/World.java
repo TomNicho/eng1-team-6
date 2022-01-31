@@ -5,16 +5,19 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
-import main.game.world.content.Bullet;
-import main.game.world.content.College;
-import main.game.world.content.NPC;
+import main.game.core.Calculations;
+import main.game.core.Constants.*;
+import main.game.world.content.*;
 import main.game.world.player.Player;
 import main.game.world.ui.IGUI;
 
@@ -30,12 +33,13 @@ public class World {
     // private TiledMapRenderer mapRenderer;
     private OrthographicCamera gameCamera, uiCamera;
     private SpriteBatch batch, uiBatch;
+    private ShapeRenderer basic;
 
     public World() {
         //Read Input Files To::
         worldMap = new TmxMapLoader().load("tiles/libmpTest.tmx");
 
-        player = new Player(100, new Vector2(0,0), 0);
+        player = new Player(100, 100, new Vector2(0,0), 0);
         npcs = new HashSet<>();
         colleges = new HashSet<>();
         eBullets = new HashSet<>();
@@ -47,9 +51,14 @@ public class World {
         uiCamera = new OrthographicCamera();
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
+        basic = new ShapeRenderer();
 
-        colleges.add(new College(1000, "James", new Vector2(100,100)));
+        // colleges.add(new College(1000, "James", new Vector2(100,100)));
         npcs.add(new NPC(500, new Vector2(-100,-100), 235));
+        npcs.add(new NPC(500, new Vector2(-300,-100), 180));
+        npcs.add(new NPC(500, new Vector2(-500,-100), 45));
+        npcs.add(new NPC(500, new Vector2(-700,-100), 270));
+        npcs.add(new NPC(500, new Vector2(-900,-100), 315));
 
         gameCamera.setToOrtho(false, 1080, 720);
         uiCamera.setToOrtho(false);
@@ -67,11 +76,11 @@ public class World {
     private void update() {
 
         //Update Player
-        float bSPawn = player.update();
+        int bSPawn = player.update();
         Vector2 playerCenter = player.getCenter();
 
         if (bSPawn != -1) {
-            pBullets.add(new Bullet(player.getPosition(), bSPawn, Player.BULLET_SPEED, 50));
+            pBullets.add(new Bullet(playerCenter.add(BulletConstants.BULLET_OFFET), (float) Calculations.DegToRad(bSPawn), PlayerConstants.BULLET_SPEED, player.getDamage()));
         }
 
         Iterator<Bullet> beIterator = eBullets.iterator();
@@ -103,11 +112,15 @@ public class World {
                 int cRet = college.update();
 
                 if (cRet == 0) {
+                    player.collectScore(CollegeConstants.SCORE_DEATH);
+                    player.collectGold(CollegeConstants.GOLD);
+                    player.collectXP(CollegeConstants.XP);
+
                     college.dispose();
                     cIterable.remove();
                 } else if (cRet == 2 && college.inRange(playerCenter)) {
-                    double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y, college.getSprite().getX() - playerCenter.x) - Math.PI / 2;
-                    eBullets.add(new Bullet(college.getPosition(), (float) angle, College.BULLET_SPEED, 10));
+                    double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y - BulletConstants.BULLET_OFFET.y, college.getSprite().getX() - playerCenter.x - BulletConstants.BULLET_OFFET.x) - Math.PI / 2;
+                    eBullets.add(new Bullet(college.getPosition(), (float) angle, CollegeConstants.BULLET_SPEED, 10));
                 }
             }
         }
@@ -117,6 +130,10 @@ public class World {
             NPC npc = nIterator.next();
 
             if (npc.update() == 0) {
+                player.collectScore(NPCConstants.SCORE_DEATH);
+                player.collectGold(NPCConstants.GOLD);
+                player.collectXP(NPCConstants.XP);
+
                 npc.dispose();
                 nIterator.remove();
             }
@@ -128,6 +145,7 @@ public class World {
         collisions();
 
         // Update Both Cameras
+        basic.setProjectionMatrix(gameCamera.combined);
         batch.setProjectionMatrix(gameCamera.combined);
         uiBatch.setProjectionMatrix(uiCamera.combined);
         gameCamera.position.set(player.getPosition(), gameCamera.position.z);
@@ -142,6 +160,7 @@ public class World {
             if (player.getBounds().overlaps(eb.getBounds())) {
                 eb.hit();
                 player.takeDamage(eb.getDamage());
+                player.collectScore(PlayerConstants.SCORE_HIT);
             }
         }
 
@@ -154,6 +173,7 @@ public class World {
                     if (c.getBounds().overlaps(pb.getBounds())) {
                         pb.hit();
                         c.takeDamage(pb.getDamage());
+                        player.collectScore(CollegeConstants.SCORE_HIT);
                         collided = true;
                         break;
                     }
@@ -167,6 +187,7 @@ public class World {
                     if (n.getBounds().overlaps(pb.getBounds())) {
                         pb.hit();
                         n.takeDamage(pb.getDamage());
+                        player.collectScore(NPCConstants.SCORE_HIT);
                         break;
                     }
                 }
@@ -180,15 +201,6 @@ public class World {
 
         // mapRenderer.render();
         batch.begin();
-        player.render(batch);
-
-        for (NPC npcs : npcs) {
-            npcs.render(batch);
-        }
-
-        for (College college : colleges) {
-            college.render(batch);
-        }
 
         for (Bullet bullet : eBullets) {
             bullet.render(batch);
@@ -198,11 +210,25 @@ public class World {
             bullet.render(batch);
         }
 
+        for (NPC npcs : npcs) {
+            npcs.render(batch);
+        }
+
+        for (College college : colleges) {
+            college.render(batch);
+        }
+
+        player.render(batch);
         batch.end();
+
+        basic.begin(ShapeType.Filled);
+        basic.setColor(Color.BLACK);
+        basic.rect(player.getCenter().x, player.getCenter().y, 1, 1);
+        basic.end();
 
         //RenderUI
         uiBatch.begin();
-        inGameUI.draw(uiBatch, player.getPosition());
+        inGameUI.draw(uiBatch, player);
         uiBatch.end();
     }
 

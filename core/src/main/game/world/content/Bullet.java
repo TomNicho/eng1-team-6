@@ -8,10 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.core.Calculations;
+import main.game.core.Constants.BulletConstants;
 
 public class Bullet extends Entity {
-    public static final float RANGE = 500f;
-
     private Texture texture;
     private Sprite sprite;
     private float bulletSpeed;
@@ -32,7 +31,7 @@ public class Bullet extends Entity {
     }
 
     public int update() {
-        if (Math.abs(Calculations.V2Magnitude(this.getOrigin()) - Calculations.V2Magnitude(this.getPosition())) > Bullet.RANGE || hitTarget) return 0;
+        if (Math.abs(Calculations.V2Magnitude(this.getOrigin()) - Calculations.V2Magnitude(this.getPosition())) > BulletConstants.RANGE || hitTarget) return 0;
 
         Vector2 movement = new Vector2();
         movement.x = (float) Math.sin(sprite.getRotation()) * bulletSpeed * Gdx.graphics.getDeltaTime();

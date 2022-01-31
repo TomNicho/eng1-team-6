@@ -33,8 +33,8 @@ public class GameRunner extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        world.dispose();
-        menu.dispose();
+        if (world != null) world.dispose();
+        if (menu != null) menu.dispose();
     }
 
     @Override

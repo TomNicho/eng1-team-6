@@ -8,11 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.core.Calculations;
+import main.game.core.Constants.NPCConstants;
 
 public class NPC extends Entity {
-    public static final float MOVE_SPEED = 100f;
-    public static final float PROCESS_RANGE = 1000f;
-    
     private Texture texture;
     private Sprite sprite;
     private int health;
@@ -27,7 +25,7 @@ public class NPC extends Entity {
     }
     
     public int update() {
-        if (this.health < 0) return 0;
+        if (this.health <= 0) return 0;
         return 1;
     }
 
@@ -62,7 +60,7 @@ public class NPC extends Entity {
     }
     
     public boolean inProcess(Vector2 pos) {
-        if (pos.dst(this.getPosition()) <= PROCESS_RANGE) return true;
+        if (pos.dst(this.getPosition()) <= NPCConstants.PROCESS_RANGE) return true;
         else return false;
     }
 }

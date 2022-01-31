@@ -4,10 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import main.game.GameRunner;
 import main.game.core.Calculations;
-import main.game.world.content.Bullet;
+import main.game.core.Constants.PlayerConstants;
 import main.game.world.content.Entity;
-
-import java.util.Set;
+import main.game.world.player.Stats.PlayerStats;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -18,23 +17,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends Entity {
-    public static final float SPEED = 100f;
-    public static final float FIRE_RATE = 500f;
-    public static final float BULLET_SPEED = 250f;
-
+    private PlayerStats stats;
     private Texture boat;
     private Sprite sprite;
-    private Set<Bullet> playerBullets;
 
-    private int health;
     private long lastShot;
 
-    public Player(int health, Vector2 initialPosition, float initialRotation){
-        this.health = health;
+    public Player(int health, int damage, Vector2 initialPosition, float initialRotation){
         this.lastShot = TimeUtils.millis();
-
-        boat = new Texture(Gdx.files.internal("core/assets/textures/boat.png"));
-        sprite = new Sprite(boat, 32, 64);
+        this.stats = new PlayerStats(health, damage, 0, 0);
+        this.boat = new Texture(Gdx.files.internal("textures/boat.png"));
+        this.sprite = new Sprite(boat, 32, 64);
 
         sprite.setPosition(initialPosition.x, initialPosition.y);
         sprite.setRotation(initialRotation);
@@ -45,21 +38,21 @@ public class Player extends Entity {
         double rotX = 0, rotY = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            position.x = -SPEED * Gdx.graphics.getDeltaTime();
+            position.x = -PlayerConstants.SPEED * Gdx.graphics.getDeltaTime();
             rotX = Math.PI / 2;
             rotY = Math.PI / 2;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            position.x = SPEED * Gdx.graphics.getDeltaTime();
+            position.x = PlayerConstants.SPEED * Gdx.graphics.getDeltaTime();
             rotX = 3 * Math.PI / 2;
             rotY = 3 * Math.PI / 2;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            position.y = SPEED * Gdx.graphics.getDeltaTime();
+            position.y = PlayerConstants.SPEED * Gdx.graphics.getDeltaTime();
             if (rotX == 3 * Math.PI / 2) rotX = 2 * Math.PI;
             else rotX = 0;
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            position.y = -SPEED * Gdx.graphics.getDeltaTime();
+            position.y = -PlayerConstants.SPEED * Gdx.graphics.getDeltaTime();
             rotY = Math.PI;
             if (rotX == 0) rotX = Math.PI;
         }
@@ -69,10 +62,11 @@ public class Player extends Entity {
         sprite.translate(position.x, position.y);
         sprite.setRotation((float) Calculations.RadToDeg(rotation));
 
-        if (TimeUtils.timeSinceMillis(lastShot) <= FIRE_RATE) {
+        if (TimeUtils.timeSinceMillis(lastShot) <= PlayerConstants.FIRE_RATE) {
             return -1;
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                System.out.println(sprite.getBoundingRectangle().getWidth() + " " + sprite.getBoundingRectangle().getHeight());
                 lastShot = TimeUtils.millis();
                 return 0;
             }
@@ -107,14 +101,39 @@ public class Player extends Entity {
     }
 
     public void takeDamage(int damage) {
-        this.health -= damage;
-        if(this.health <= 0) {
-            GameRunner.IS_MENU = true;
-        }
+        if (stats.takeDamage(damage)) GameRunner.IS_MENU = true;
+    }
+
+    public void collectGold(int amount) {
+        stats.increaseGold(amount);
+    }
+
+    public void collectXP(int amount) {
+        stats.increaseXP(amount);
+    }
+
+    public void collectScore(int amount) {
+        stats.increaseScore(amount);
+    }
+
+    public int getGold() {
+        return stats.getGold();
+    }
+
+    public int[] getLevelNXP() {
+        return stats.getLevelNXP();
+    }
+
+    public int getDamage() {
+        return stats.getDamage();
     }
 
     public int getHealth() {
-        return health;
+        return stats.getHealth();
+    }
+
+    public int getScore() {
+        return stats.getScore();
     }
 
     public float getRotation() {
@@ -126,7 +145,7 @@ public class Player extends Entity {
     }
 
     public Vector2 getCenter() {
-        return Calculations.SpriteCenter(sprite);
+        return Calculations.SpriteDynamicCenter(sprite);
     }
 
     public Sprite getSprite() {
@@ -135,9 +154,5 @@ public class Player extends Entity {
 
     public Rectangle getBounds() {
         return sprite.getBoundingRectangle();
-    }
-
-    public Set<Bullet> getBullets() {
-        return playerBullets;
     }
 }
