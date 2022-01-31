@@ -23,8 +23,13 @@ public class College extends Entity {
     public College(int health, String name, Vector2 position) {
         this.health = health;
         this.name = name;
-
-        collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
+        try{
+        String texturePath = "textures/" + this.name.toLowerCase() +".png";
+        collegeTexture = new Texture(Gdx.files.internal(texturePath));
+        }
+        catch(Exception fileNotFoundException){
+            collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
+        }
         collegeSprite = new Sprite(collegeTexture);
 
         collegeSprite.setPosition(position.x, position.y);
