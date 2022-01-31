@@ -30,12 +30,12 @@ public class Bullet extends Entity {
         hitTarget = false;
     }
 
-    public int update() {
+    public int update(float deltaTime) {
         if (Math.abs(Calculations.V2Magnitude(this.getOrigin()) - Calculations.V2Magnitude(this.getPosition())) > BulletConstants.RANGE || hitTarget) return 0;
 
         Vector2 movement = new Vector2();
-        movement.x = (float) Math.sin(sprite.getRotation()) * bulletSpeed * Gdx.graphics.getDeltaTime();
-        movement.y = (float) Math.cos(sprite.getRotation()) * bulletSpeed * Gdx.graphics.getDeltaTime();
+        movement.x = (float) Math.sin(sprite.getRotation()) * bulletSpeed * deltaTime;
+        movement.y = (float) Math.cos(sprite.getRotation()) * bulletSpeed * deltaTime;
         sprite.setPosition(sprite.getX() + movement.x, sprite.getY() + movement.y);
         return 1;
     }

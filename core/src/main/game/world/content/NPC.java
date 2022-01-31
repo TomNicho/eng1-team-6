@@ -24,7 +24,7 @@ public class NPC extends Entity {
         sprite.setRotation(rotation);
     }
     
-    public int update() {
+    public int update(float deltaTime) {
         if (this.health <= 0) return 0;
         return 1;
     }
@@ -52,7 +52,7 @@ public class NPC extends Entity {
     }
     
     public Vector2 getCenter() {
-        return Calculations.SpriteCenter(sprite);
+        return Calculations.SpriteDynamicCenter(sprite);
     }
 
     public Rectangle getBounds() {

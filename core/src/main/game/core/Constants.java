@@ -3,8 +3,11 @@ package main.game.core;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
+    public static final float COLLIDE_DAMAGE = 10f;
+    public static final float COLLIDE_PUSHBACK = 200;
+
     public static class CollegeConstants {
-        public static final float FIRE_RATE = 1000f;
+        public static final float FIRE_RATE = 2000f;
         public static final float RANGE = 500f;
         public static final float PROCESS_RANGE = 1000f;
         public static final float BULLET_SPEED = 250f;
@@ -19,6 +22,8 @@ public class Constants {
         public static final float FIRE_RATE = 500f;
         public static final float BULLET_SPEED = 250f;
         public static final int SCORE_HIT = 5;
+        public static final int IMMUNE_LENGTH = 1000;
+        public static final int DISABLED_LENGTH = 250;
     }
 
     public static class NPCConstants {

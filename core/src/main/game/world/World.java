@@ -5,17 +5,14 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.core.Calculations;
+import main.game.core.Constants;
+import main.game.core.XMLLoader;
 import main.game.core.Constants.*;
 import main.game.world.content.*;
 import main.game.world.player.Player;
@@ -29,38 +26,34 @@ public class World {
     private Set<Bullet> eBullets;
     private Set<Bullet> pBullets;
 
-    private TiledMap worldMap;
-    // private TiledMapRenderer mapRenderer;
     private OrthographicCamera gameCamera, uiCamera;
     private SpriteBatch batch, uiBatch;
-    private ShapeRenderer basic;
 
     public World() {
-        //Read Input Files To::
-        worldMap = new TmxMapLoader().load("tiles/libmpTest.tmx");
+        // Create XMLLoader to load input files
+        XMLLoader loader = new XMLLoader("core/assets/entities.xml");
+
+        try {
+            //Read input file and initalize variables
+            loader.load();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         player = new Player(100, 100, new Vector2(0,0), 0);
-        npcs = new HashSet<>();
-        colleges = new HashSet<>();
+        npcs = loader.getNpcs();
+        colleges = loader.getColleges();
         eBullets = new HashSet<>();
         pBullets = new HashSet<>();
         inGameUI = new IGUI();
 
-        // mapRenderer = new OrthogonalTiledMapRenderer(worldMap);
+        //Generate npc and college objects using XML data
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
-        basic = new ShapeRenderer();
 
-        // colleges.add(new College(1000, "James", new Vector2(100,100)));
-        npcs.add(new NPC(500, new Vector2(-100,-100), 235));
-        npcs.add(new NPC(500, new Vector2(-300,-100), 180));
-        npcs.add(new NPC(500, new Vector2(-500,-100), 45));
-        npcs.add(new NPC(500, new Vector2(-700,-100), 270));
-        npcs.add(new NPC(500, new Vector2(-900,-100), 315));
-
-        gameCamera.setToOrtho(false, 1080, 720);
+        gameCamera.setToOrtho(false);
         uiCamera.setToOrtho(false);
     }
 
@@ -74,9 +67,15 @@ public class World {
     }
 
     private void update() {
+        // if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        //     GameRunner.IS_MENU = true;
+        //     return;
+        // } 
+
+        float deltaTime = Gdx.graphics.getDeltaTime();
 
         //Update Player
-        int bSPawn = player.update();
+        int bSPawn = player.update(deltaTime);
         Vector2 playerCenter = player.getCenter();
 
         if (bSPawn != -1) {
@@ -87,7 +86,7 @@ public class World {
         while (beIterator.hasNext()) {
             Bullet bullet = beIterator.next();
 
-            if (bullet.update() == 0) {
+            if (bullet.update(deltaTime) == 0) {
                 bullet.dispose();
                 beIterator.remove();
                 continue;
@@ -98,7 +97,7 @@ public class World {
         while (bpIterator.hasNext()) {
             Bullet bullet = bpIterator.next();
 
-            if (bullet.update() == 0) {
+            if (bullet.update(deltaTime) == 0) {
                 bullet.dispose();
                 bpIterator.remove();
             }
@@ -109,7 +108,7 @@ public class World {
             College college = cIterable.next();
 
             if (college.inProcess(playerCenter)) {
-                int cRet = college.update();
+                int cRet = college.update(deltaTime);
 
                 if (cRet == 0) {
                     player.collectScore(CollegeConstants.SCORE_DEATH);
@@ -129,7 +128,7 @@ public class World {
         while (nIterator.hasNext()) {
             NPC npc = nIterator.next();
 
-            if (npc.update() == 0) {
+            if (npc.update(deltaTime) == 0) {
                 player.collectScore(NPCConstants.SCORE_DEATH);
                 player.collectGold(NPCConstants.GOLD);
                 player.collectXP(NPCConstants.XP);
@@ -145,7 +144,6 @@ public class World {
         collisions();
 
         // Update Both Cameras
-        basic.setProjectionMatrix(gameCamera.combined);
         batch.setProjectionMatrix(gameCamera.combined);
         uiBatch.setProjectionMatrix(uiCamera.combined);
         gameCamera.position.set(player.getPosition(), gameCamera.position.z);
@@ -154,19 +152,49 @@ public class World {
 
     private void collisions() {
         Vector2 playerCenter = player.getCenter();
+        boolean collided = false;
 
-        //Process enemy bullets towards the Player
-        for (Bullet eb : eBullets) {
-            if (player.getBounds().overlaps(eb.getBounds())) {
-                eb.hit();
-                player.takeDamage(eb.getDamage());
-                player.collectScore(PlayerConstants.SCORE_HIT);
+        //Process Player Collisions With A College
+        for (College c : colleges) {
+            if (c.inProcess(playerCenter)) {
+                if (c.getBounds().overlaps(player.getBounds())) {
+                    player.takeDamage((int) Constants.COLLIDE_DAMAGE, c.getCenter());
+                    collided = true;
+                    break;
+                }
             }
         }
 
+        //Process Player Collisions With A NPC
+        if (!collided) {
+            for (NPC n : npcs) {
+                if (n.inProcess(playerCenter)) {
+                    if (n.getBounds().overlaps(player.getBounds())) {
+                        player.takeDamage((int) Constants.COLLIDE_DAMAGE, n.getCenter());
+                        collided = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        //Process enemy bullets towards the Player
+        if (!collided) {
+            for (Bullet eb : eBullets) {
+                if (player.getBounds().overlaps(eb.getBounds())) {
+                    eb.hit();
+                    player.takeDamage(eb.getDamage(), eb.getCenter());
+                    break;
+                }
+            }
+        }
+
+        if (collided) player.collectScore(PlayerConstants.SCORE_HIT);
+
         //Process player bullets for NPCs and Colleges
         for (Bullet pb : pBullets) {
-            boolean collided = false;
+            collided = false;
 
             for (College c : colleges) {
                 if (c.inProcess(playerCenter)) {
@@ -221,11 +249,6 @@ public class World {
         player.render(batch);
         batch.end();
 
-        basic.begin(ShapeType.Filled);
-        basic.setColor(Color.BLACK);
-        basic.rect(player.getCenter().x, player.getCenter().y, 1, 1);
-        basic.end();
-
         //RenderUI
         uiBatch.begin();
         inGameUI.draw(uiBatch, player);
@@ -234,8 +257,6 @@ public class World {
 
     public void dispose() {
         //Remove All Entities
-        player.dispose();
-
         for (NPC npc : npcs) {
             npc.dispose();
         }
@@ -253,8 +274,9 @@ public class World {
             bullet.dispose();
         }
 
+        player.dispose();
         batch.dispose();
-        worldMap.dispose();
+        uiBatch.dispose();
         inGameUI.dispose();
     }
 }

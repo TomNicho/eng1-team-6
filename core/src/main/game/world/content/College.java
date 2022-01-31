@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import main.game.core.Calculations;
 import main.game.core.Constants.CollegeConstants;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -31,7 +32,7 @@ public class College extends Entity {
         lastShot = TimeUtils.millis();
     }
 
-    public int update() {
+    public int update(float deltaTime) {
         if (this.health < 0) return 0;
         if (TimeUtils.timeSinceMillis(lastShot) > CollegeConstants.FIRE_RATE) {
             lastShot = TimeUtils.millis();
@@ -76,6 +77,10 @@ public class College extends Entity {
 
     public Sprite getSprite() {
         return collegeSprite;
+    }
+
+    public Vector2 getCenter() {
+        return Calculations.SpriteCenter(collegeSprite);
     }
 
     public boolean inRange(Vector2 pos) {

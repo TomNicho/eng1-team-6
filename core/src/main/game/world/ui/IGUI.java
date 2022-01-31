@@ -16,7 +16,7 @@ public class IGUI {
 
     private BitmapFont font;
     private LabelStyle basicStyle;
-    private Label position, xp, level, gold, score;
+    private Label position, xp, level, gold, score, health;
 
     public IGUI() {
         font = new BitmapFont();
@@ -26,6 +26,7 @@ public class IGUI {
         xp = new Label("XP - 0", basicStyle);
         level = new Label("LEVEL - 0", basicStyle);
         gold = new Label("GOLD - 0", basicStyle);
+        health = new Label("HEALTH - 0", basicStyle);
 
         score.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y - xp.getHeight());
         xp.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - xp.getHeight() - score.getHeight());
@@ -33,6 +34,7 @@ public class IGUI {
         gold.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 4 - xp.getHeight() - score.getHeight() - level.getHeight() - gold.getHeight());
 
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
+        health.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y * 2 + position.getHeight());
     }
 
     public void draw(SpriteBatch batch, Player player) {
@@ -46,12 +48,14 @@ public class IGUI {
         xp.setText(String.format("XP - %s/%s", playerLnX[1], playerLnX[2]));
         level.setText(String.format("LEVEL - %s", playerLnX[0]));
         gold.setText(String.format("GOLD - %s", player.getGold()));
+        health.setText(String.format("HEALTH - %s", player.getHealth()));
 
         position.draw(batch, parentAlpha);
         xp.draw(batch, parentAlpha);
         score.draw(batch, parentAlpha);
         level.draw(batch, parentAlpha);
         gold.draw(batch, parentAlpha);
+        health.draw(batch, parentAlpha);
     }
 
     public void dispose() {
