@@ -40,7 +40,7 @@ public class World {
             System.out.println(e);
         }
 
-        player = new Player(100, 100, new Vector2(0,0), 0);
+        player = new Player(100, 100, new Vector2(0,0), 0, loader.getObjectives());
         npcs = loader.getNpcs();
         colleges = loader.getColleges();
         eBullets = new HashSet<>();
@@ -114,7 +114,10 @@ public class World {
                     player.collectScore(CollegeConstants.SCORE_DEATH);
                     player.collectGold(CollegeConstants.GOLD);
                     player.collectXP(CollegeConstants.XP);
-                    player.updateObjective("college");
+
+                    if (player.getCurrentObjective() != null) {
+                        if (player.getCurrentObjective().getuKey().equals("college")) player.updateObjective("college", 1);
+                    }
 
                     college.dispose();
                     cIterable.remove();
@@ -133,7 +136,10 @@ public class World {
                 player.collectScore(NPCConstants.SCORE_DEATH);
                 player.collectGold(NPCConstants.GOLD);
                 player.collectXP(NPCConstants.XP);
-                player.updateObjective("npc");
+
+                if (player.getCurrentObjective() != null) {
+                    if (player.getCurrentObjective().getuKey().equals("npc")) player.updateObjective("npc", 1);
+                }
 
                 npc.dispose();
                 nIterator.remove();
@@ -142,7 +148,6 @@ public class World {
     }
 
     private void process() {
-
         collisions();
 
         // Update Both Cameras

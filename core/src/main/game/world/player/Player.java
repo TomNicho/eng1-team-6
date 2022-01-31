@@ -7,7 +7,11 @@ import main.game.core.Calculations;
 import main.game.core.Constants;
 import main.game.core.Constants.PlayerConstants;
 import main.game.world.content.Entity;
+import main.game.world.player.Objectives.Objective;
+import main.game.world.player.Objectives.ObjectiveManager;
 import main.game.world.player.Stats.PlayerStats;
+
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -19,6 +23,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends Entity {
     private PlayerStats stats;
+    private ObjectiveManager objectives;
     private Texture boat;
     private Sprite sprite;
 
@@ -28,7 +33,7 @@ public class Player extends Entity {
     private long lastShot;
     private long lastHit;
 
-    public Player(int health, int damage, Vector2 initialPosition, float initialRotation){
+    public Player(int health, int damage, Vector2 initialPosition, float initialRotation, List<Objective> objectives){
         long currentTime = TimeUtils.millis();
         this.lastShot = currentTime;
         this.lastHit = currentTime;
@@ -37,6 +42,7 @@ public class Player extends Entity {
         this.disabledAngle = 0f;
 
         this.stats = new PlayerStats(health, damage, 0, 0);
+        this.objectives = new ObjectiveManager(objectives);
         this.boat = new Texture(Gdx.files.internal("textures/boat.png"));
         this.sprite = new Sprite(boat, 32, 64);
 
@@ -160,12 +166,12 @@ public class Player extends Entity {
         stats.increaseScore(amount);
     }
 
-    public void updateObjective(String update){
-        stats.updateObjective(update);
+    public void updateObjective(String update, int amount){
+        objectives.updateObjective(update, amount);
     }
 
-    public String getCurrentObjective(){
-        return stats.getCurrentObjective();
+    public Objective getCurrentObjective(){
+        return objectives.getCurrentObjective();
     }
 
     public int getGold() {

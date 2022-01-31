@@ -14,7 +14,6 @@ public class PlayerStats {
 
     private Gold gold;
     private Leveler leveler;
-    private objective objective;
 
     public PlayerStats(int health, int damage, int xp, int gold) {
         this.initialDamage = damage;
@@ -24,7 +23,6 @@ public class PlayerStats {
 
         this.gold = new Gold(gold);
         this.leveler = new Leveler(xp);
-        this.objective = new objective();
     }
 
     public void increaseGold(int amount) {
@@ -33,14 +31,6 @@ public class PlayerStats {
 
     public void increaseXP(int amount) {
         if (leveler.increase(amount)) levelUP();
-    }
-
-    public void updateObjective(String update){
-        objective.check(update);
-    }
-
-    public String getCurrentObjective(){
-        return objective.getObjective();
     }
 
     private void levelUP() {
