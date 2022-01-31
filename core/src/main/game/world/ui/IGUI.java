@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import main.game.world.player.Player;
+import main.game.world.player.Stats.objective;
 
 public class IGUI {
     private static final int PAGE_OFFSET_X = 10;
@@ -16,7 +17,7 @@ public class IGUI {
 
     private BitmapFont font;
     private LabelStyle basicStyle;
-    private Label position, xp, level, gold, score, health;
+    private Label position, xp, level, gold, score, health, objective;
 
     public IGUI() {
         font = new BitmapFont();
@@ -27,11 +28,13 @@ public class IGUI {
         level = new Label("LEVEL - 0", basicStyle);
         gold = new Label("GOLD - 0", basicStyle);
         health = new Label("HEALTH - 0", basicStyle);
+        objective = new Label("objective - ", basicStyle);
 
         score.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y - xp.getHeight());
         xp.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - xp.getHeight() - score.getHeight());
         level.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - xp.getHeight() - score.getHeight() - level.getHeight());
         gold.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 4 - xp.getHeight() - score.getHeight() - level.getHeight() - gold.getHeight());
+        objective.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 4 - xp.getHeight() - score.getHeight() - level.getHeight() - gold.getHeight() - objective.getHeight());
 
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
         health.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y * 2 + position.getHeight());
@@ -49,6 +52,7 @@ public class IGUI {
         level.setText(String.format("LEVEL - %s", playerLnX[0]));
         gold.setText(String.format("GOLD - %s", player.getGold()));
         health.setText(String.format("HEALTH - %s", player.getHealth()));
+        objective.setText(String.format("objective - %s", player.getCurrentObjective()));
 
         position.draw(batch, parentAlpha);
         xp.draw(batch, parentAlpha);
@@ -56,6 +60,7 @@ public class IGUI {
         level.draw(batch, parentAlpha);
         gold.draw(batch, parentAlpha);
         health.draw(batch, parentAlpha);
+        objective.draw(batch, parentAlpha);
     }
 
     public void dispose() {

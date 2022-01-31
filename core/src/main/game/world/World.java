@@ -114,6 +114,7 @@ public class World {
                     player.collectScore(CollegeConstants.SCORE_DEATH);
                     player.collectGold(CollegeConstants.GOLD);
                     player.collectXP(CollegeConstants.XP);
+                    player.updateObjective("college");
 
                     college.dispose();
                     cIterable.remove();
@@ -132,6 +133,7 @@ public class World {
                 player.collectScore(NPCConstants.SCORE_DEATH);
                 player.collectGold(NPCConstants.GOLD);
                 player.collectXP(NPCConstants.XP);
+                player.updateObjective("npc");
 
                 npc.dispose();
                 nIterator.remove();

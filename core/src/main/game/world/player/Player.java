@@ -160,6 +160,14 @@ public class Player extends Entity {
         stats.increaseScore(amount);
     }
 
+    public void updateObjective(String update){
+        stats.updateObjective(update);
+    }
+
+    public String getCurrentObjective(){
+        return stats.getCurrentObjective();
+    }
+
     public int getGold() {
         return stats.getGold();
     }
