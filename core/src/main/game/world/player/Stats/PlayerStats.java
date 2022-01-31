@@ -70,7 +70,7 @@ public class PlayerStats {
 
     public boolean takeDamage(int damage) {
         this.health -= damage;
-        if (health < 0) return true;
+        if (health <= 0) return true;
         else return false;
     }
 }

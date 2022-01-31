@@ -23,7 +23,7 @@ public class MenuUI {
         
         label.setFontScale(2f);
         label.setWidth(label.getWidth() * 2);
-        label.setPosition(GameRunner.SCREEN_WIDTH / 2 - label.getWidth() / 2, 100);
+        label.setPosition(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2, 100);
         stage.addActor(label);
     }
 
@@ -37,6 +37,8 @@ public class MenuUI {
 
         if (Gdx.input.isKeyPressed(Keys.ENTER)) {
             GameRunner.IS_MENU = false;
+        } else if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+            GameRunner.CLOSING = true;
         }
 
         stage.act(delta);
