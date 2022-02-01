@@ -55,8 +55,8 @@ public class IGUI {
         compass.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
         needle.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
         
-        objectiveValue.setPosition(Gdx.graphics.getWidth() - objectiveValue.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - compass.getHeight() - objectiveValue.getHeight());
-        objectiveName.setPosition(Gdx.graphics.getWidth() - objectiveName.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - compass.getHeight() - objectiveValue.getHeight() - objectiveName.getHeight());
+        objectiveValue.setPosition(Gdx.graphics.getWidth() / 2 - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - objectiveValue.getHeight());
+        objectiveName.setPosition(Gdx.graphics.getWidth() / 2  - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - objectiveValue.getHeight() - objectiveName.getHeight());
 
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
         health.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y * 2 + position.getHeight());
