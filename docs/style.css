@@ -64,7 +64,7 @@ body{
     display:flex;
     justify-content: space-between;
     margin: 0 auto;
-    width: 250px;
+    width: 350px;
     background: rgba(0,0,0,0.2);
     border-radius: 10px;
     padding: 15px;
@@ -136,4 +136,22 @@ body{
 
 .info-link a{
     color: orange;
+}
+
+.deliver-title{
+    font-size: 30px;
+    color:white;
+    font-weight: 400;
+}
+#req{
+    width: 80vw;
+    display:flex;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.reqim{
+    width: 400px;
+    margin-left: 10px;
+    border-radius: 5px;
 }
