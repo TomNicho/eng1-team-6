@@ -21,7 +21,13 @@ public class College extends Entity {
         this.name = name;
         this.ukey = ukey;
 
-        collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
+        try {
+            String texturePath = "textures/" + this.name.toLowerCase() +".png";
+            collegeTexture = new Texture(Gdx.files.internal(texturePath));
+        } catch (Exception fileNotFoundException) {
+            collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
+        }
+        
         sprite = new Sprite(collegeTexture);
 
         //Set inital college transform.

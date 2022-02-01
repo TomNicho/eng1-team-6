@@ -14,7 +14,7 @@ public class NPC extends Entity {
     
     public NPC(int health, Vector2 position, float rotation) {
         this.health = health;
-        this.texture = new Texture(Gdx.files.internal("textures/NPC.png"));
+        this.texture = new Texture(Gdx.files.internal("textures/npc2.png"));
         this.sprite = new Sprite(texture);
 
         //Set inital NPC transform.
