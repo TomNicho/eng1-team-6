@@ -1,6 +1,7 @@
 package main.game.core;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,10 +9,12 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import com.badlogic.gdx.math.Vector2;
 
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import main.game.world.content.College;
 import main.game.world.content.NPC;
@@ -30,10 +33,16 @@ public class XMLLoader {
         this.objectives = new ArrayList<>();
     }
 
-    public void load() throws Exception {
+    /**
+     * Loads all the objects from the XML File given and initalises all {@link Entity}, and {@link Objective} instances present.
+     * @throws ParserConfigurationException The document cannot be created.
+     * @throws IOException If any IO errors occur.
+     * @throws SAXException If any parse errors occur.
+     */
+    public void load() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document document = documentBuilder.parse(xmlFile);
-
+ 
         NodeList xmlcolleges = document.getElementsByTagName("college");
         NodeList xmlnpcs = document.getElementsByTagName("npc");
         NodeList xmlObjectives = document.getElementsByTagName("objective");

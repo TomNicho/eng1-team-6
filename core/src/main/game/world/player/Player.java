@@ -17,7 +17,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -25,7 +24,6 @@ public class Player extends Entity {
     private PlayerStats stats;
     private ObjectiveManager objectives;
     private Texture boat;
-    private Sprite sprite;
 
     private boolean immune, disabled;
 
@@ -33,7 +31,7 @@ public class Player extends Entity {
     private long lastShot;
     private long lastHit;
 
-    public Player(int health, int damage, Vector2 initialPosition, float initialRotation, List<Objective> objectives){
+    public Player(int health, int damage, Vector2 position, float rotation, List<Objective> objectives){
         long currentTime = TimeUtils.millis();
         this.lastShot = currentTime;
         this.lastHit = currentTime;
@@ -44,15 +42,21 @@ public class Player extends Entity {
         this.stats = new PlayerStats(health, damage, 0, 0);
         this.objectives = new ObjectiveManager(objectives);
         this.boat = new Texture(Gdx.files.internal("textures/boat.png"));
-        this.sprite = new Sprite(boat, 32, 64);
+        this.sprite = new Sprite(boat);
 
-        sprite.setPosition(initialPosition.x, initialPosition.y);
-        sprite.setRotation(initialRotation);
+        //Set inital player transfrom
+        sprite.setPosition(position.x, position.y);
+        sprite.setRotation(rotation);
     }
 
+    @Override
     public int update(float deltaTime) {
+
+        //Check if the player is disabled, if so it can't shoot and it cannot move.
         if (disabled) {
             if (lastHit + PlayerConstants.DISABLED_LENGTH > TimeUtils.millis()) {
+
+                //Translate the player based on it's forced movement
                 sprite.translate((float) Math.cos(disabledAngle) * Constants.COLLIDE_PUSHBACK * deltaTime, (float) Math.sin(disabledAngle) * Constants.COLLIDE_PUSHBACK * deltaTime);
                 return -1;
             } else disabled = false;
@@ -62,6 +66,7 @@ public class Player extends Entity {
         double rotX = 0, rotY = 0;
         boolean input = false;
 
+        //Get the player input keys and determine the x axis of movement
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             input = true;
             position.x = -PlayerConstants.SPEED * deltaTime;
@@ -74,6 +79,7 @@ public class Player extends Entity {
             rotY = 3 * Math.PI / 2;
         }
 
+        //Get the player input keys and determine the y axis of movement
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             input = true;
             position.y = PlayerConstants.SPEED * deltaTime;
@@ -86,16 +92,19 @@ public class Player extends Entity {
             if (rotX == 0) rotX = Math.PI;
         }
 
+        //Combine the rotation's gathered to create and average for the player to be rotated on.
         double rotation = (rotX + rotY) / 2;
 
         sprite.translate(position.x, position.y);
         if (input) sprite.setRotation((float) Calculations.RadToDeg(rotation));
 
+        //If the player is immune but not disabled then prevent the player from shooting
         if (immune) {
             if (lastHit + PlayerConstants.IMMUNE_LENGTH > TimeUtils.millis()) return -1;
-            else collideFinish();
+            else immune = false;
         }
 
+        //Find if any shooting keys are pressed and that the player can shoot to return the bullet angle.
         if (TimeUtils.timeSinceMillis(lastShot) <= PlayerConstants.FIRE_RATE) {
             return -1;
         } else {
@@ -123,16 +132,17 @@ public class Player extends Entity {
         }
     }
 
-    private void collideFinish() {
-        immune = false;
-    }
-
+    /**
+     * When the player is hit, either by a bullet and collision, set the player to disabled and immune.
+     * Also begin forced movement between the player and the origin provided.
+     * @param origin a {@link Vector2} origin to determine where the player gets moved.
+     */
     private void collided(Vector2 origin) {
         immune = true;
         disabled = true;
         lastHit = TimeUtils.millis();
 
-
+        //Use the center of the player and the origin to find out the forced disabled movement.
         Vector2 center = getCenter();
         disabledAngle = (float) Math.atan2(center.y - origin.y, center.x - origin.x);
     }
@@ -147,6 +157,11 @@ public class Player extends Entity {
         boat.dispose();
     }
 
+    /**
+     * Make the player take an amount of damage based on an origin, and check if the player is dead to then return to the menu.
+     * @param damage the amount of damage the player takes.
+     * @param origin the origin for which the collision came from.
+     */
     public void takeDamage(int damage, Vector2 origin) {
         if (!immune) {
             if (stats.takeDamage(damage)) MainRunner.IS_MENU = true;
@@ -154,18 +169,35 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Call the player stats to increase the amount of {@link Gold} the player has.
+     * @param amount The amount of {@link Gold} to increase by.
+     */
     public void collectGold(int amount) {
         stats.increaseGold(amount);
     }
 
+    /**
+     * Call the player stats to increase the amount of xp the player has. Stored by the {@link Leveler}.
+     * @param amount The amount of xp to increase by.
+     */
     public void collectXP(int amount) {
         stats.increaseXP(amount);
     }
 
+    /**
+     * Call the player stats to increase the amount of score the player has.
+     * @param amount The amount of score to increase by.
+     */
     public void collectScore(int amount) {
         stats.increaseScore(amount);
     }
 
+    /**
+     * Call the {@link ObjectiveManager} to potentially update an {@link Objective} based on a objective key.
+     * @param update The {@link Objective} key to check if this update matches the current objective.
+     * @param amount The amount in which to increase the {@link Objective} by.
+     */
     public void updateObjective(String update, int amount){
         objectives.updateObjective(update, amount);
     }
@@ -192,25 +224,5 @@ public class Player extends Entity {
 
     public int getScore() {
         return stats.getScore();
-    }
-
-    public float getRotation() {
-        return sprite.getRotation();
-    }
-
-    public Vector2 getPosition() {
-        return new Vector2(sprite.getX(), sprite.getY());
-    }
-
-    public Vector2 getCenter() {
-        return Calculations.SpriteDynamicCenter(sprite);
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public Rectangle getBounds() {
-        return sprite.getBoundingRectangle();
     }
 }

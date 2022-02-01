@@ -4,15 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import main.game.core.Calculations;
 import main.game.core.Constants.NPCConstants;
 
 public class NPC extends Entity {
     private Texture texture;
-    private Sprite sprite;
     private int health;
     
     public NPC(int health, Vector2 position, float rotation) {
@@ -20,11 +17,14 @@ public class NPC extends Entity {
         this.texture = new Texture(Gdx.files.internal("textures/NPC.png"));
         this.sprite = new Sprite(texture);
 
+        //Set inital NPC transform.
         sprite.setPosition(position.x, position.y);
         sprite.setRotation(rotation);
     }
     
+    @Override
     public int update(float deltaTime) {
+        //Check if the npc is not dead to determine whether it should be removed.
         if (this.health <= 0) return 0;
         return 1;
     }
@@ -45,18 +45,6 @@ public class NPC extends Entity {
     
     public int getHealth() {
         return health;
-    }
-    
-    public Vector2 getPosition() {
-        return new Vector2(this.sprite.getX(), this.sprite.getY());
-    }
-    
-    public Vector2 getCenter() {
-        return Calculations.SpriteDynamicCenter(sprite);
-    }
-
-    public Rectangle getBounds() {
-        return sprite.getBoundingRectangle();
     }
     
     public boolean inProcess(Vector2 pos) {

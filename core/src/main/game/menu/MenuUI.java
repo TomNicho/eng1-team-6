@@ -32,9 +32,17 @@ public class MenuUI {
         render();
     }
 
+    /**
+     * Updates all instances within the {@link MenuUI} and act the {@link Stage}.
+     * @see 
+     * {@link Label},
+     * {@link BitmapFont},
+     * {@link Stage}.
+     */
     private void update() {
         float delta = Gdx.graphics.getDeltaTime();
 
+        //Check if the menu needs to switch to the world or close the program
         if (Gdx.input.isKeyPressed(Keys.ENTER)) {
             MainRunner.IS_MENU = false;
         } else if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
@@ -44,6 +52,11 @@ public class MenuUI {
         stage.act(delta);
     }
     
+    /**
+     * Renders the {@link Stage} within the {@link MenuUI}.
+     * @see
+     * {@link Stage}.
+     */
     private void render() {
         Gdx.gl.glClearColor(0.3f, 0.6f, 0.8f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

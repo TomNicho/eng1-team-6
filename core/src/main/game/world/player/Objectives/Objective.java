@@ -16,6 +16,12 @@ public class Objective {
         this.count = 0;
     }
 
+    /**
+     * Updates the current {@link Objective} based of a key and increases the {@link Objective} count.
+     * @param update the {@link Objective} key.
+     * @param a An amount to increase the {@link Objective} count by.
+     * @return if the {@link Objective} has been completed.
+     */
     public boolean updateObjective(String update, int a) {
         if (update.equals(uKey)) count += a;
         if (count >= amount) return true;

@@ -42,25 +42,35 @@ public class IGUI {
         compass = new Sprite(compassTexture);
         needle = new Sprite(needlTexture);
 
+        //Set the inital positions of all labels within the in game UI.
         score.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y - xp.getHeight());
         xp.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - xp.getHeight() - score.getHeight());
         level.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - xp.getHeight() - score.getHeight() - level.getHeight());
         gold.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 4 - xp.getHeight() - score.getHeight() - level.getHeight() - gold.getHeight());
         
+        //Set the compass size and inital positions.
         compass.setSize(160, 160);
         compass.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
         needle.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
+        
         objectiveValue.setPosition(Gdx.graphics.getWidth() - objectiveValue.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - compass.getHeight() - objectiveValue.getHeight());
         objectiveName.setPosition(Gdx.graphics.getWidth() - objectiveName.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - compass.getHeight() - objectiveValue.getHeight() - objectiveName.getHeight());
 
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
         health.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y * 2 + position.getHeight());
 
+        //Set some label features, like text alignment and wrapping for multiline text.
         objectiveName.setWrap(true);
         objectiveName.setAlignment(Align.center);
         objectiveValue.setAlignment(Align.center);
     }
 
+    /**
+     * Sets the updated text values and draws each label within the {@link IGUI}.
+     * This is based on {@link Player} stats and a {@link SpriteBatch} to draw from.
+     * @param batch to render the {@link Label}s to.
+     * @param player to update the {@link Label} values.
+     */
     public void draw(SpriteBatch batch, Player player) {
         float parentAlpha = 1f;
 
@@ -78,6 +88,10 @@ public class IGUI {
         needle.draw(batch);
     }
 
+    /**
+     * Sets the text values for each {@link Label} based on updated {@link Player} data. 
+     * @param player to get the updated data from.
+     */
     private void setTexts(Player player) {
         Vector2 playerPosition = player.getPosition();
         position.setText(String.format("POSITION - X:%s, Y:%s", playerPosition.x, playerPosition.y));
@@ -105,6 +119,9 @@ public class IGUI {
         }
     }
 
+    /**
+     * To dispose the {@link IGUI}. 
+     */
     public void dispose() {
         font.dispose();
         compassTexture.dispose();

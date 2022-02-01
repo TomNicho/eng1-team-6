@@ -7,14 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import main.game.core.Calculations;
 import main.game.core.Constants.CollegeConstants;
-
-import com.badlogic.gdx.math.Rectangle;
 
 public class College extends Entity {
     private Texture collegeTexture;
-    private Sprite collegeSprite;
     private int health;
     private String name;
 
@@ -25,14 +21,17 @@ public class College extends Entity {
         this.name = name;
 
         collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
-        collegeSprite = new Sprite(collegeTexture);
+        sprite = new Sprite(collegeTexture);
 
-        collegeSprite.setPosition(position.x, position.y);
-        collegeSprite.setRotation(0);
+        //Set inital college transform.
+        sprite.setPosition(position.x, position.y);
+        sprite.setRotation(0);
         lastShot = TimeUtils.millis();
     }
 
     public int update(float deltaTime) {
+        
+        // Check if the college has no health and if the college and shoot again
         if (this.health < 0) return 0;
         if (TimeUtils.timeSinceMillis(lastShot) > CollegeConstants.FIRE_RATE) {
             lastShot = TimeUtils.millis();
@@ -43,7 +42,7 @@ public class College extends Entity {
 
     @Override
     public void render(SpriteBatch batch) {
-        collegeSprite.draw(batch);
+        sprite.draw(batch);
     }
 
     @Override
@@ -66,23 +65,7 @@ public class College extends Entity {
     public String getName() {
         return name;
     }
-
-    public Vector2 getPosition() {
-        return new Vector2(collegeSprite.getX(), collegeSprite.getY());
-    }
     
-    public Rectangle getBounds() {
-        return collegeSprite.getBoundingRectangle();
-    }
-
-    public Sprite getSprite() {
-        return collegeSprite;
-    }
-
-    public Vector2 getCenter() {
-        return Calculations.SpriteCenter(collegeSprite);
-    }
-
     public boolean inRange(Vector2 pos) {
         if (pos.dst(this.getPosition()) <= CollegeConstants.RANGE) return true;
         else return false;
