@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Constants {
     public static final float COLLIDE_DAMAGE = 10f;
     public static final float COLLIDE_PUSHBACK = 200;
+    public static final float WOLD_BOUND_MIN = -100f;
+    public static final float WOLD_BOUND_MAX = 500f;
 
     public static class CollegeConstants {
         public static final float FIRE_RATE = 2000f;
@@ -18,7 +20,7 @@ public class Constants {
     }
 
     public static class PlayerConstants {
-        public static final float SPEED = 100f;
+        public static final float SPEED = 125f;
         public static final float FIRE_RATE = 500f;
         public static final float BULLET_SPEED = 250f;
         public static final int SCORE_HIT = 5;

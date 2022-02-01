@@ -1,27 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entities>
-<college>
-    <x>200</x>
-    <y>200</y>
-    <health>20</health>
-    <name>Derwent</name>
-</college>
-<college>
-    <x>100</x>
-    <y>100</y>
-    <health>1000</health>
-    <name>James</name>
-</college>
-<npc>
-    <x>-600</x>
-    <y>-600</y>
-    <health>10</health>
-    <rotation>200</rotation>
-</npc>
-<npc>
-    <x>-100</x>
-    <y>-100</y>
-    <health>500</health>
-    <rotation>235</rotation>
-</npc>
+    <colleges>
+        <college>
+            <x>2500</x>
+            <y>800</y>
+            <health>1000</health>
+            <name>James</name>
+            <ukey>college-james</ukey>
+        </college>
+    </colleges>
+    <npcs>
+        <npc>
+            <x>1100</x>
+            <y>1050</y>
+            <health>500</health>
+            <rotation>45</rotation>
+        </npc>
+        <npc>
+            <x>950</x>
+            <y>900</y>
+            <health>500</health>
+            <rotation>235</rotation>
+        </npc>
+        <npc>
+            <x>1150</x>
+            <y>850</y>
+            <health>500</health>
+            <rotation>200</rotation>
+        </npc>
+    </npcs>
+    <objectives>
+        <objective>
+            <x>0</x>
+            <y>10000</y>
+            <xp>1</xp>
+            <amount>250</amount>
+            <name>USE (W,A,S,D) TO MOVE AROUND!</name>
+            <ukey>move</ukey>
+        </objective>
+        <objective>
+            <x>0</x>
+            <y>10000</y>
+            <xp>1</xp>
+            <amount>8</amount>
+            <name>USE ARROW KEYS TO SHOOT!</name>
+            <ukey>shoot</ukey>
+        </objective>
+        <objective>
+            <x>1000</x>
+            <y>1000</y>
+            <xp>2</xp>
+            <amount>3</amount>
+            <name>DESTROY 3 ENEMY BOATS!</name>
+            <ukey>npc</ukey>
+        </objective>
+        <objective>
+            <x>2500</x>
+            <y>800</y>
+            <xp>5</xp>
+            <amount>1</amount>
+            <name>DESTROY JAMES COLLEGE!</name>
+            <ukey>college-james</ukey>
+        </objective>
+    </objectives>
 </entities>
