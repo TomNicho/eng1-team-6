@@ -137,3 +137,9 @@ body{
 .info-link a{
     color: orange;
 }
+
+.deliver-title{
+    font-size: 30px;
+    color:white;
+    font-weight: 400;
+}
