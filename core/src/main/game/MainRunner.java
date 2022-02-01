@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import main.game.menu.MenuUI;
 import main.game.world.World;
 
-public class GameRunner extends ApplicationAdapter {   
+public class MainRunner extends ApplicationAdapter {   
     //Temp H & W until fullscreen cals
     public static boolean IS_MENU = true, CLOSING = false;
     
@@ -31,6 +31,7 @@ public class GameRunner extends ApplicationAdapter {
             return;
         }
 
+        //Fullscreen Option For Testing
         if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
             if (fullscreenCooldown + 1000 < TimeUtils.millis()) {
                 fullscreenCooldown = TimeUtils.millis();
@@ -39,6 +40,7 @@ public class GameRunner extends ApplicationAdapter {
             }
         }
 
+        //Game Loop and Menu Cycle
         if (IS_MENU) {
             if (menu == null) generateMenu();
             menu.menuCycle();
@@ -54,12 +56,18 @@ public class GameRunner extends ApplicationAdapter {
         if (menu != null) menu.dispose();
     }
 
+    /**
+     * Generates a new {@link World} and disposes the {@link MenuUI}.
+     */
     public void generateWorld() {
         menu.dispose();
         menu = null;
         world = new World();
     }
 
+    /**
+     * Generates a new {@link MenuUI} and disposes the {@link World}.
+     */
     public void generateMenu() {
         world.dispose();
         world = null;
