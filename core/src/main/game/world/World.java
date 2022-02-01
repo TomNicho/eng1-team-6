@@ -133,10 +133,8 @@ public class World {
                     if (player.getCurrentObjective() != null) {
                         if (player.getCurrentObjective().getuKey().equals(college.getUkey())) player.updateObjective(college.getUkey(), 1);
                     }
-
-                    college.dispose();
-                    cIterable.remove();
-                } else if (cRet == 2 && college.inRange(playerCenter)) {
+                    college.capture();
+                } else if (cRet == 2 && college.inRange(playerCenter) && college.getName() != "captured") {
 
                     //Create a bullet between the player and college
                     double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y - BulletConstants.BULLET_OFFET.y, college.getSprite().getX() - playerCenter.x - BulletConstants.BULLET_OFFET.x) - Math.PI / 2;
