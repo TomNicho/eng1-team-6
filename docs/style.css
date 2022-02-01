@@ -143,3 +143,14 @@ body{
     color:white;
     font-weight: 400;
 }
+#req{
+    width: 80vw;
+    display:flex;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.reqim{
+    width: 400px;
+    margin-left: 10px;
+}
