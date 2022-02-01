@@ -11,10 +11,12 @@ public class DesktopLauncher {
         //Setting Default Params
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Testing";
-        config.width = 1080;
-        config.height = 720;
         config.foregroundFPS = 60;
         config.backgroundFPS = 60;
+        config.vSyncEnabled = true;
+        config.width = 1280;
+        config.height = 720;
+        // config.fullscreen = true;
         config.addIcon("icons/pirate_icon.png", FileType.Internal);
         new LwjglApplication(new MainRunner(), config);
     }
