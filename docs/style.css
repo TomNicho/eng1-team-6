@@ -16,7 +16,7 @@ body{
   }
 #backvideo{
     position: fixed;
-    filter: brightness(50%);
+    filter: brightness(30%);
     transform: scale(1.2);
     width: 100%;
     
@@ -150,11 +150,13 @@ body{
     width: 80vw;
     display:flex;
     justify-content: center;
+    flex-flow: wrap;
     margin: 0 auto;
     margin-top: 20px;
 }
 .reqim{
-    width: 400px;
+    width: 600px;
     margin-left: 10px;
+    margin-top: 20px;
     border-radius: 5px;
 }
