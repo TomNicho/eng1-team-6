@@ -39,8 +39,8 @@ public class IGUI {
         winner = new Label("YOU WIN!", basicStyle);
         winnerButton = new Label("PRESS ESCAPE TO FINISH", basicStyle);
 
-        compassTexture = new Texture(Gdx.files.internal("textures/compass.png"));
-        needlTexture = new Texture(Gdx.files.internal("textures/needle.png"));
+        compassTexture = new Texture(Gdx.files.internal("textures/compass3.png"));
+        needlTexture = new Texture(Gdx.files.internal("textures/needle2.png"));
         compass = new Sprite(compassTexture);
         needle = new Sprite(needlTexture);
 
