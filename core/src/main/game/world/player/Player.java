@@ -43,7 +43,7 @@ public class Player extends Entity {
 
         this.stats = new PlayerStats(health, damage, 0, 0);
         this.objectives = new ObjectiveManager(objectives);
-        this.boat = new Texture(Gdx.files.internal("textures/boat.png"));
+        this.boat = new Texture(Gdx.files.internal("textures/boat2.png"));
         this.sprite = new Sprite(boat, 32, 64);
 
         sprite.setPosition(initialPosition.x, initialPosition.y);
