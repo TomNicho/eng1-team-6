@@ -13,11 +13,18 @@ public class ObjectiveManager {
      * Updates an {@link Objective} with a given key, if there is an {@link Objective} to modify.
      * @param update the {@link Objective} key.
      * @param amount to increase the {@link Objective} count.
+     * @return the xp from the current {@link Objective}, if this {@link Objective} was completed.
      */
-    public void updateObjective(String update, int amount) {
+    public int updateObjective(String update, int amount) {
         if (objectives.size() != 0) {
-            if (objectives.get(0).updateObjective(update, amount)) changeObjectives();
+            int potentialXp = objectives.get(0).getXp();
+            if (objectives.get(0).updateObjective(update, amount)) {
+                changeObjectives();
+                return potentialXp;
+            }
         }
+
+        return 0;
     }
 
     /**

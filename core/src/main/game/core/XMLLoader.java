@@ -63,7 +63,8 @@ public class XMLLoader {
             int collegeElementX = Integer.parseInt(collegeElement.getElementsByTagName("x").item(0).getTextContent());
             int collegeElementY = Integer.parseInt(collegeElement.getElementsByTagName("y").item(0).getTextContent());
             String collegeElementName = collegeElement.getElementsByTagName("name").item(0).getTextContent();
-            colleges.add(new College(collegeElementHealth, collegeElementName, new Vector2(collegeElementX, collegeElementY)));
+            String collegeKey = collegeElement.getElementsByTagName("ukey").item(0).getTextContent();
+            colleges.add(new College(collegeElementHealth, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY)));
         }
 
         for (int i = 0; i < xmlObjectives.getLength(); i++) {

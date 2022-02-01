@@ -83,6 +83,9 @@ public class World {
         Vector2 playerCenter = player.getCenter();
 
         if (bSPawn != -1) {
+            //Check if there is a shooting objective
+            if (player.getCurrentObjective() != null && player.getCurrentObjective().getuKey().equals("shoot")) player.updateObjective("shoot", 1);
+
             //Spawn player bullet based on player update response
             pBullets.add(new Bullet(playerCenter.add(BulletConstants.BULLET_OFFET), (float) Calculations.DegToRad(bSPawn), PlayerConstants.BULLET_SPEED, player.getDamage()));
         }
@@ -128,7 +131,7 @@ public class World {
                     player.collectXP(CollegeConstants.XP);
 
                     if (player.getCurrentObjective() != null) {
-                        if (player.getCurrentObjective().getuKey().equals("college")) player.updateObjective("college", 1);
+                        if (player.getCurrentObjective().getuKey().equals(college.getUkey())) player.updateObjective(college.getUkey(), 1);
                     }
 
                     college.dispose();
@@ -175,7 +178,7 @@ public class World {
         // Update Both Cameras
         batch.setProjectionMatrix(gameCamera.combined);
         uiBatch.setProjectionMatrix(uiCamera.combined);
-        gameCamera.position.set(player.getPosition(), gameCamera.position.z);
+        gameCamera.position.set(player.getCenter(), gameCamera.position.z);
         gameCamera.update();
     }
 

@@ -49,4 +49,11 @@ public class Calculations {
     public static Vector2 SpriteCenter(Sprite sprite) {
         return new Vector2(sprite.getX() + sprite.getWidth() / 2, sprite.getY() + sprite.getHeight() / 2);
     }
+
+    // public static Vector2 ExceedsBounds (Vector2 vector2, float min, float max) {
+    //     Vector2 out = new Vector2(1,1);
+    //     if (vector2.x < min || vector2.x > max) out.x = 0;
+    //     if (vector2.y < min || vector2.y > max) out.y = 0;
+    //     return out;
+    // }
 }

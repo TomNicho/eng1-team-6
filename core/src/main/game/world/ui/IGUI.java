@@ -23,7 +23,7 @@ public class IGUI {
     private Sprite compass, needle;
     private BitmapFont font;
     private LabelStyle basicStyle;
-    private Label position, xp, level, gold, score, health, objectiveName, objectiveValue;
+    private Label position, xp, level, gold, score, health, objectiveName, objectiveValue, winner, winnerButton;
 
     public IGUI() {
         font = new BitmapFont();
@@ -36,6 +36,8 @@ public class IGUI {
         health = new Label("HEALTH - 0", basicStyle);
         objectiveName = new Label("CURRENT OBJECTIVE", basicStyle);
         objectiveValue = new Label("CURRENT OBJECTIVE", basicStyle);
+        winner = new Label("YOU WIN!", basicStyle);
+        winnerButton = new Label("PRESS ESCAPE TO FINISH", basicStyle);
 
         compassTexture = new Texture(Gdx.files.internal("textures/compass.png"));
         needlTexture = new Texture(Gdx.files.internal("textures/needle.png"));
@@ -59,10 +61,16 @@ public class IGUI {
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
         health.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y * 2 + position.getHeight());
 
+        winner.setFontScale(2f);
+        winner.setPosition(Gdx.graphics.getWidth() * 0.5f - winner.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f - winner.getHeight() / 2);
+        winnerButton.setPosition(Gdx.graphics.getWidth() * 0.5f - winnerButton.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f - winner.getHeight() / 2 - PAGE_OFFSET_Y * 2 - winnerButton.getHeight() / 2);
+
         //Set some label features, like text alignment and wrapping for multiline text.
         objectiveName.setWrap(true);
         objectiveName.setAlignment(Align.center);
         objectiveValue.setAlignment(Align.center);
+        winner.setAlignment(Align.center);
+        winnerButton.setAlignment(Align.center);
     }
 
     /**
@@ -86,6 +94,11 @@ public class IGUI {
         objectiveValue.draw(batch, parentAlpha);
         compass.draw(batch);
         needle.draw(batch);
+
+        if (player.getWon()) {
+            winner.draw(batch, parentAlpha);
+            winnerButton.draw(batch, parentAlpha);
+        }
     }
 
     /**

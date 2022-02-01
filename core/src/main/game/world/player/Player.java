@@ -25,7 +25,7 @@ public class Player extends Entity {
     private ObjectiveManager objectives;
     private Texture boat;
 
-    private boolean immune, disabled;
+    private boolean immune, disabled, won;
 
     private float disabledAngle;
     private long lastShot;
@@ -37,6 +37,7 @@ public class Player extends Entity {
         this.lastHit = currentTime;
         this.immune = false;
         this.disabled = false;
+        this.won = false;
         this.disabledAngle = 0f;
 
         this.stats = new PlayerStats(health, damage, 0, 0);
@@ -51,6 +52,10 @@ public class Player extends Entity {
 
     @Override
     public int update(float deltaTime) {
+        //If the game is Won and the player presses escape return to the menu
+        if (won) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) MainRunner.IS_MENU = true;
+        }
 
         //Check if the player is disabled, if so it can't shoot and it cannot move.
         if (disabled) {
@@ -94,9 +99,15 @@ public class Player extends Entity {
 
         //Combine the rotation's gathered to create and average for the player to be rotated on.
         double rotation = (rotX + rotY) / 2;
+       
+        //Clamp Player position if it exceeds bounds
+        // Vector2 exceeds = Calculations.ExceedsBounds(getPosition(), Constants.WOLD_BOUND_MIN, Constants.WOLD_BOUND_MAX);
 
         sprite.translate(position.x, position.y);
         if (input) sprite.setRotation((float) Calculations.RadToDeg(rotation));
+
+        //If there is a movement objective then check keys
+        if (getCurrentObjective() != null && getCurrentObjective().getuKey().equals("move")) updateObjective("move", (int) Calculations.V2Magnitude(position));
 
         //If the player is immune but not disabled then prevent the player from shooting
         if (immune) {
@@ -199,7 +210,10 @@ public class Player extends Entity {
      * @param amount The amount in which to increase the {@link Objective} by.
      */
     public void updateObjective(String update, int amount){
-        objectives.updateObjective(update, amount);
+        int xpGain = objectives.updateObjective(update, amount);
+
+        if (xpGain != 0) collectXP(xpGain);
+        if (getCurrentObjective() == null) won = true;
     }
 
     public Objective getCurrentObjective(){
@@ -224,5 +238,9 @@ public class Player extends Entity {
 
     public int getScore() {
         return stats.getScore();
+    }
+
+    public boolean getWon() {
+        return won;
     }
 }

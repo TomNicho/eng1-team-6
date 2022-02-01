@@ -12,13 +12,14 @@ import main.game.core.Constants.CollegeConstants;
 public class College extends Entity {
     private Texture collegeTexture;
     private int health;
-    private String name;
+    private String name, ukey;
 
     private long lastShot;
 
-    public College(int health, String name, Vector2 position) {
+    public College(int health, String name, String ukey, Vector2 position) {
         this.health = health;
         this.name = name;
+        this.ukey = ukey;
 
         collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
         sprite = new Sprite(collegeTexture);
@@ -64,6 +65,10 @@ public class College extends Entity {
 
     public String getName() {
         return name;
+    }
+
+    public String getUkey() {
+        return ukey;
     }
     
     public boolean inRange(Vector2 pos) {
