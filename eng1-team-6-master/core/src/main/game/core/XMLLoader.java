@@ -60,11 +60,17 @@ public class XMLLoader {
         for (int i = 0; i < xmlcolleges.getLength(); i++){
             Element collegeElement = (Element) xmlcolleges.item(i);
             int collegeElementHealth = Integer.parseInt(collegeElement.getElementsByTagName("health").item(0).getTextContent());
+            int collegeElementDamage = Integer.parseInt(collegeElement.getElementsByTagName("damage").item(0).getTextContent());
             int collegeElementX = Integer.parseInt(collegeElement.getElementsByTagName("x").item(0).getTextContent());
             int collegeElementY = Integer.parseInt(collegeElement.getElementsByTagName("y").item(0).getTextContent());
             String collegeElementName = collegeElement.getElementsByTagName("name").item(0).getTextContent();
             String collegeKey = collegeElement.getElementsByTagName("ukey").item(0).getTextContent();
-            colleges.add(new College(collegeElementHealth, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY)));
+
+            if (collegeKey.equals("college-goodricke")) {
+                colleges.add(new College(collegeElementHealth, collegeElementDamage, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY), true));
+            } else {
+                colleges.add(new College(collegeElementHealth, collegeElementDamage, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY), false));
+            }
         }
 
         for (int i = 0; i < xmlObjectives.getLength(); i++) {
