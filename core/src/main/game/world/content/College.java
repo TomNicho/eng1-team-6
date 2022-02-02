@@ -11,21 +11,23 @@ import main.game.core.Constants.CollegeConstants;
 
 public class College extends Entity {
     private Texture collegeTexture;
+
     private int health;
     private String name, ukey;
-
+    private boolean allied;
     private long lastShot;
 
-    public College(int health, String name, String ukey, Vector2 position) {
+    public College(int health, String name, String ukey, Vector2 position, boolean allied) {
         this.health = health;
         this.name = name;
         this.ukey = ukey;
+        this.allied = allied;
 
         try {
-            String texturePath = "textures/" + this.name.toLowerCase() +".png";
+            String texturePath = "textures/" + this.name.toLowerCase() + ".png";
             collegeTexture = new Texture(Gdx.files.internal(texturePath));
         } catch (Exception fileNotFoundException) {
-            collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
+            collegeTexture = new Texture(Gdx.files.internal("textures/captured.png"));
         }
         
         sprite = new Sprite(collegeTexture);
@@ -36,8 +38,17 @@ public class College extends Entity {
         lastShot = TimeUtils.millis();
     }
 
+    public void setAllied() {
+        allied = true;
+        collegeTexture.dispose();
+        collegeTexture = new Texture(Gdx.files.internal("textures/captured.png"));
+        sprite.setTexture(collegeTexture);
+    }
+
+    @Override
     public int update(float deltaTime) {
-        
+        if (allied) return -1;
+
         // Check if the college has no health and if the college and shoot again
         if (this.health < 0) return 0;
         if (TimeUtils.timeSinceMillis(lastShot) > CollegeConstants.FIRE_RATE) {
@@ -58,7 +69,7 @@ public class College extends Entity {
     }
 
     public void takeDamage(int damage) {
-        health -= damage;
+        if (!allied) health -= damage;
     }
 
     public void shoot() {
@@ -76,6 +87,10 @@ public class College extends Entity {
     public String getUkey() {
         return ukey;
     }
+
+    public boolean getAllied() {
+        return allied;
+    }
     
     public boolean inRange(Vector2 pos) {
         if (pos.dst(this.getPosition()) <= CollegeConstants.RANGE) return true;
@@ -85,5 +100,12 @@ public class College extends Entity {
     public boolean inProcess(Vector2 pos) {
         if (pos.dst(this.getPosition()) <= CollegeConstants.PROCESS_RANGE) return true;
         else return false;
+    }
+    public void capture(){
+        Vector2 replacePos = new Vector2(this.getPosition());
+        this.name = "captured";
+        this.collegeTexture = new Texture(Gdx.files.internal("textures/captured.png"));
+        this.sprite = new Sprite(this.collegeTexture);
+        this.sprite.setPosition(replacePos.x, replacePos.y);
     }
 }

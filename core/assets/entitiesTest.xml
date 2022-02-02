@@ -33,6 +33,12 @@
             <health>10</health>
             <rotation>200</rotation>
         </npc>
+        <npc>
+            <x>700</x>
+            <y>-100</y>
+            <health>10</health>
+            <rotation>200</rotation>
+        </npc>
     </npcs>
     <objectives>
         <objective>

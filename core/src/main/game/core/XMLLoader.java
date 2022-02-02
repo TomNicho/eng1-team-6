@@ -64,7 +64,12 @@ public class XMLLoader {
             int collegeElementY = Integer.parseInt(collegeElement.getElementsByTagName("y").item(0).getTextContent());
             String collegeElementName = collegeElement.getElementsByTagName("name").item(0).getTextContent();
             String collegeKey = collegeElement.getElementsByTagName("ukey").item(0).getTextContent();
-            colleges.add(new College(collegeElementHealth, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY)));
+
+            if (collegeKey.equals("college-goodricke")) {
+                colleges.add(new College(collegeElementHealth, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY), true));
+            } else {
+                colleges.add(new College(collegeElementHealth, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY), false));
+            }
         }
 
         for (int i = 0; i < xmlObjectives.getLength(); i++) {

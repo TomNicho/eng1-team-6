@@ -2,11 +2,18 @@
 <entities>
     <colleges>
         <college>
-            <x>2500</x>
+            <x>500</x>
             <y>800</y>
             <health>1000</health>
             <name>James</name>
             <ukey>college-james</ukey>
+        </college>
+         <college>
+            <x>0</x>
+            <y>300</y>
+            <health>1000</health>
+            <name>Goodricke</name>
+            <ukey>college-goodricke</ukey>
         </college>
     </colleges>
     <npcs>
@@ -25,6 +32,12 @@
         <npc>
             <x>1150</x>
             <y>850</y>
+            <health>500</health>
+            <rotation>200</rotation>
+        </npc>
+        <npc>
+            <x>1000</x>
+            <y>1100</y>
             <health>500</health>
             <rotation>200</rotation>
         </npc>
