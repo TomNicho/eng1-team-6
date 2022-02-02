@@ -33,7 +33,7 @@ public class World {
 
     public World() {
         // Create XMLLoader to load input files
-        XMLLoader loader = new XMLLoader("core/assets/entities.xml");
+        XMLLoader loader = new XMLLoader(Gdx.files.internal("xmls/entities.xml"));
 
         try {
             //Read input file and initalize variables
