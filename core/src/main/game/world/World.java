@@ -5,11 +5,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import main.game.MainRunner;
 import main.game.core.Calculations;
 import main.game.core.Constants;
 import main.game.core.XMLLoader;
@@ -41,7 +43,7 @@ public class World {
         }
 
         //Initialise all world objects
-        player = new Player(100, 100, new Vector2(0,0), 0, loader.getObjectives());
+        player = new Player(100, 100, new Vector2(0,0), 270, loader.getObjectives());
         npcs = loader.getNpcs();
         colleges = loader.getColleges();
         eBullets = new HashSet<>();
@@ -76,6 +78,8 @@ public class World {
      * {@link Entity},
      */
     private void update() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) MainRunner.IS_MENU = true;
+
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         //Update Player
@@ -83,6 +87,7 @@ public class World {
         Vector2 playerCenter = player.getCenter();
 
         if (bSPawn != -1) {
+
             //Check if there is a shooting objective
             if (player.getCurrentObjective() != null && player.getCurrentObjective().getuKey().equals("shoot")) player.updateObjective("shoot", 1);
 
@@ -124,7 +129,10 @@ public class World {
             if (college.inProcess(playerCenter)) {
                 int cRet = college.update(deltaTime);
 
-                //If college has been destroyed update player stats, and remove the college
+                // if the college is allied don't do anything
+                if (cRet == -1) continue;
+
+                //If college has been destroyed update player stats, and set the college to allied
                 if (cRet == 0) {
                     player.collectScore(CollegeConstants.SCORE_DEATH);
                     player.collectGold(CollegeConstants.GOLD);
@@ -133,12 +141,14 @@ public class World {
                     if (player.getCurrentObjective() != null) {
                         if (player.getCurrentObjective().getuKey().equals(college.getUkey())) player.updateObjective(college.getUkey(), 1);
                     }
-                    college.capture();
-                } else if (cRet == 2 && college.inRange(playerCenter) && college.getName() != "captured") {
+
+                    college.setAllied();
+                } else if (cRet == 2 && college.inRange(playerCenter)) {
 
                     //Create a bullet between the player and college
-                    double angle = -Math.atan2(college.getSprite().getY() - playerCenter.y - BulletConstants.BULLET_OFFET.y, college.getSprite().getX() - playerCenter.x - BulletConstants.BULLET_OFFET.x) - Math.PI / 2;
-                    eBullets.add(new Bullet(college.getPosition(), (float) angle, CollegeConstants.BULLET_SPEED, 10));
+                    Vector2 collegeOrigin = college.getCenter();
+                    double angle = -Math.atan2(collegeOrigin.y - playerCenter.y - BulletConstants.BULLET_OFFET.y, collegeOrigin.x - playerCenter.x - BulletConstants.BULLET_OFFET.x) - Math.PI / 2;
+                    eBullets.add(new Bullet(new Vector2(collegeOrigin.x - 16, collegeOrigin.y - 16), (float) angle, CollegeConstants.BULLET_SPEED, 10));
                 }
             }
         }
@@ -239,12 +249,15 @@ public class World {
                 if (c.inProcess(playerCenter)) {
                     if (c.getBounds().overlaps(pb.getBounds())) {
 
-                        //if hit queue removing the bullet and update health and score
+                        //if hit queue removing the bullet and update health and score if the enemy college is not allied.
                         pb.hit();
-                        c.takeDamage(pb.getDamage());
-                        player.collectScore(CollegeConstants.SCORE_HIT);
                         collided = true;
-                        break;
+
+                        if (!c.getAllied()) {
+                            c.takeDamage(pb.getDamage());
+                            player.collectScore(CollegeConstants.SCORE_HIT);
+                            break;
+                        }
                     }
                 }
             }
