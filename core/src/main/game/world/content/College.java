@@ -27,7 +27,7 @@ public class College extends Entity {
             String texturePath = "textures/" + this.name.toLowerCase() + ".png";
             collegeTexture = new Texture(Gdx.files.internal(texturePath));
         } catch (Exception fileNotFoundException) {
-            collegeTexture = new Texture(Gdx.files.internal("textures/college.png"));
+            collegeTexture = new Texture(Gdx.files.internal("textures/captured.png"));
         }
         
         sprite = new Sprite(collegeTexture);
@@ -41,7 +41,7 @@ public class College extends Entity {
     public void setAllied() {
         allied = true;
         collegeTexture.dispose();
-        collegeTexture = new Texture(Gdx.files.internal("textures/allied.png"));
+        collegeTexture = new Texture(Gdx.files.internal("textures/captured.png"));
         sprite.setTexture(collegeTexture);
     }
 
