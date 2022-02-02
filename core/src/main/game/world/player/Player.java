@@ -28,13 +28,13 @@ public class Player extends Entity {
     private boolean immune, disabled, won;
 
     private float disabledAngle;
-    private long lastShot, lastHit, lastScore;
+    private long lastShot, lastHit; //lastScore;
 
     public Player(int health, int damage, Vector2 position, float rotation, List<Objective> objectives){
         long currentTime = TimeUtils.millis();
         this.lastShot = currentTime;
         this.lastHit = currentTime;
-        this.lastScore = currentTime;
+        // this.lastScore = currentTime;
 
         this.immune = false;
         this.disabled = false;
@@ -57,10 +57,10 @@ public class Player extends Entity {
         if (won) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) MainRunner.IS_MENU = true;
         } else {  
-            if (lastScore + 1000 < TimeUtils.millis()) {
-                lastScore = TimeUtils.millis();
-                collectScore(1);
-            }
+            // if (lastScore + 1000 < TimeUtils.millis()) {
+            //     lastScore = TimeUtils.millis();
+            //     collectScore(1);
+            // }
         }
 
         //Check if the player is disabled, if so it can't shoot and it cannot move.
@@ -76,7 +76,6 @@ public class Player extends Entity {
         Vector2 position = new Vector2(0,0);
         double rotX = 0, rotY = 0;
         boolean input = false;
-        int scoreIncrease = Math.round(PlayerConstants.SPEED * deltaTime / 2);
 
         //Get the player input keys and determine the x axis of movement
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -84,13 +83,11 @@ public class Player extends Entity {
             position.x = -PlayerConstants.SPEED * deltaTime;
             rotX = Math.PI / 2;
             rotY = Math.PI / 2;
-            this.collectScore(scoreIncrease);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             input = true;
             position.x = PlayerConstants.SPEED * deltaTime;
             rotX = 3 * Math.PI / 2;
             rotY = 3 * Math.PI / 2;
-            this.collectScore(scoreIncrease);
         }
 
         //Get the player input keys and determine the y axis of movement
@@ -99,13 +96,11 @@ public class Player extends Entity {
             position.y = PlayerConstants.SPEED * deltaTime;
             if (rotX == 3 * Math.PI / 2) rotX = 2 * Math.PI;
             else rotX = 0;
-            this.collectScore(scoreIncrease);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             input = true;
             position.y = -PlayerConstants.SPEED * deltaTime;
             rotY = Math.PI;
             if (rotX == 0) rotX = Math.PI;
-            this.collectScore(scoreIncrease);
         }
 
         //Combine the rotation's gathered to create and average for the player to be rotated on.
