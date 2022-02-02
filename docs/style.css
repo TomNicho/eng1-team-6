@@ -15,12 +15,12 @@ body{
     }
   }
 #backvideo{
+    object-fit: fill;
     position: fixed;
     filter: brightness(30%);
     transform: scale(1.2);
-    width: 100%;
-    
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 #background-image{
     
@@ -131,7 +131,14 @@ body{
     color: white;
     font-size: 40px;
 }
-
+#doing-text-snap{
+    width: 80%;
+    min-width: 700px;
+    text-align: center;
+    margin: 0 auto;
+    color: white;
+    font-size: 30px;
+}
 .info-link{
     color:white;
     font-weight: 400;
@@ -140,9 +147,15 @@ body{
 .info-link a{
     color: orange;
 }
-
+#deliverables{
+    width: 700px;
+    display: block;
+    margin: 0 auto;
+}
 .deliver-title{
-    font-size: 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
     color:white;
     font-weight: 400;
 }
