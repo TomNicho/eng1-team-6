@@ -34,8 +34,8 @@ public class IGUI {
         level = new Label("LEVEL - 0", basicStyle);
         gold = new Label("GOLD - 0", basicStyle);
         health = new Label("HEALTH - 0", basicStyle);
-        objectiveName = new Label("CURRENT OBJECTIVE", basicStyle);
-        objectiveValue = new Label("CURRENT OBJECTIVE", basicStyle);
+        objectiveName = new Label("CURRENT OBJECTIVE PLACEHOLDER", basicStyle);
+        objectiveValue = new Label("CURRENT OBJECTIVE PLACEHOLDER", basicStyle);
         winner = new Label("YOU WIN!", basicStyle);
         winnerButton = new Label("PRESS ESCAPE TO FINISH", basicStyle);
 
@@ -57,8 +57,8 @@ public class IGUI {
         compass.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
         needle.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
         
-        objectiveValue.setPosition(Gdx.graphics.getWidth() - objectiveValue.getWidth() - compass.getWidth() - PAGE_OFFSET_X * 2, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - objectiveValue.getHeight());
-        objectiveName.setPosition(Gdx.graphics.getWidth()  - objectiveName.getWidth() - compass.getWidth() - PAGE_OFFSET_X * 2, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - objectiveValue.getHeight() - objectiveName.getHeight());
+        objectiveValue.setPosition(Gdx.graphics.getWidth() - objectiveValue.getWidth() - compass.getWidth() - PAGE_OFFSET_X * 3, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 2 - objectiveValue.getHeight());
+        objectiveName.setPosition(Gdx.graphics.getWidth()  - objectiveName.getWidth() - compass.getWidth() - PAGE_OFFSET_X * 3, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - objectiveValue.getHeight() - objectiveName.getHeight());
 
         position.setPosition(PAGE_OFFSET_X, PAGE_OFFSET_Y);
         health.setPosition(Gdx.graphics.getWidth() / 2 - health.getWidth() / 2, Gdx.graphics.getHeight() / 2 - PAGE_OFFSET_Y * 4 - health.getHeight());
@@ -126,7 +126,7 @@ public class IGUI {
             double angle = Math.atan2(playerPosition.y - objectivePosition.y, playerPosition.x - objectivePosition.x) + Math.PI / 2;
             needle.setRotation((float) Calculations.RadToDeg(angle));
             objectiveValue.setText(String.format("%s / %s - %sXP", cObjective.getCount(), cObjective.getAmount(), cObjective.getXp()));
-            objectiveName.setText(String.format("%s", cObjective.getName()));
+            objectiveName.setText(String.format("%s", cObjective.getName().replaceAll("%n", "\n")));
         } else {
             needle.setRotation(0);
             objectiveValue.setText("1 / 1 - 0XP");

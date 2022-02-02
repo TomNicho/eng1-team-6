@@ -164,7 +164,7 @@
             <y>10000</y>
             <xp>1</xp>
             <amount>250</amount>
-            <name>USE (W,A,S,D) TO MOVE AROUND!</name>
+            <name>YOU ARE A GALLEON OF THE GOODRICKE FLEET.%n%nUSE (W,A,S,D) TO MOVE AROUND!</name>
             <ukey>move</ukey>
         </objective>
         <objective>
@@ -172,7 +172,7 @@
             <y>10000</y>
             <xp>1</xp>
             <amount>4</amount>
-            <name>USE ARROW KEYS TO SHOOT!</name>
+            <name>YOU MUST CAPTURE ENEMY COLLEGES AND DESTORY THEIR FLEET TO WIN.%n%nUSE ARROW KEYS TO SHOOT!</name>
             <ukey>shoot</ukey>
         </objective>
         <objective>
@@ -180,7 +180,7 @@
             <y>2000</y>
             <xp>2</xp>
             <amount>3</amount>
-            <name>DESTROY 3 ENEMY BOATS! TIP - FOLLOW YOUR COMPASS</name>
+            <name>YOUR COMPASS WILL GUIDE YOU.%n%nDESTROY 3 ENEMY BOATS!</name>
             <ukey>npc</ukey>
         </objective>
         <objective>
@@ -188,7 +188,7 @@
             <y>1800</y>
             <xp>5</xp>
             <amount>1</amount>
-            <name>DESTROY JAMES COLLEGE!</name>
+            <name>COLLEGES WILL SHOOT BACK.%n%nDESTROY JAMES COLLEGE!</name>
             <ukey>college-james</ukey>
         </objective>
         <objective>
