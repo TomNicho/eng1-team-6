@@ -43,7 +43,7 @@ public class World {
         }
 
         //Initialise all world objects
-        player = new Player(100, 100, new Vector2(0,0), 270, loader.getObjectives());
+        player = new Player(100, 100, new Vector2(1000, 1000), 270, loader.getObjectives());
         npcs = loader.getNpcs();
         colleges = loader.getColleges();
         eBullets = new HashSet<>();
@@ -148,7 +148,7 @@ public class World {
                     //Create a bullet between the player and college
                     Vector2 collegeOrigin = college.getCenter();
                     double angle = -Math.atan2(collegeOrigin.y - playerCenter.y - BulletConstants.BULLET_OFFET.y, collegeOrigin.x - playerCenter.x - BulletConstants.BULLET_OFFET.x) - Math.PI / 2;
-                    eBullets.add(new Bullet(new Vector2(collegeOrigin.x - 16, collegeOrigin.y - 16), (float) angle, CollegeConstants.BULLET_SPEED, 10));
+                    eBullets.add(new Bullet(new Vector2(collegeOrigin.x - 16, collegeOrigin.y - 16), (float) angle, CollegeConstants.BULLET_SPEED, college.getDamage()));
                 }
             }
         }

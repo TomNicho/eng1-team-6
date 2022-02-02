@@ -28,13 +28,14 @@ public class Player extends Entity {
     private boolean immune, disabled, won;
 
     private float disabledAngle;
-    private long lastShot;
-    private long lastHit;
+    private long lastShot, lastHit, lastScore;
 
     public Player(int health, int damage, Vector2 position, float rotation, List<Objective> objectives){
         long currentTime = TimeUtils.millis();
         this.lastShot = currentTime;
         this.lastHit = currentTime;
+        this.lastScore = currentTime;
+
         this.immune = false;
         this.disabled = false;
         this.won = false;
@@ -55,6 +56,11 @@ public class Player extends Entity {
         //If the game is Won and the player presses escape return to the menu
         if (won) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) MainRunner.IS_MENU = true;
+        } else {  
+            if (lastScore + 1000 < TimeUtils.millis()) {
+                lastScore = TimeUtils.millis();
+                collectScore(1);
+            }
         }
 
         //Check if the player is disabled, if so it can't shoot and it cannot move.

@@ -50,6 +50,8 @@ public class IGUI {
         level.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 3 - xp.getHeight() - score.getHeight() - level.getHeight());
         gold.setPosition(PAGE_OFFSET_X, Gdx.graphics.getHeight() - PAGE_OFFSET_Y * 4 - xp.getHeight() - score.getHeight() - level.getHeight() - gold.getHeight());
         
+        objectiveName.setHeight(500);
+
         //Set the compass size and inital positions.
         compass.setSize(160, 160);
         compass.setPosition(Gdx.graphics.getWidth() - compass.getWidth() - PAGE_OFFSET_X, Gdx.graphics.getHeight() - compass.getHeight() - PAGE_OFFSET_Y);
@@ -67,7 +69,7 @@ public class IGUI {
 
         //Set some label features, like text alignment and wrapping for multiline text.
         objectiveName.setWrap(true);
-        objectiveName.setAlignment(Align.center);
+        objectiveName.setAlignment(Align.top);
         objectiveValue.setAlignment(Align.center);
         winner.setAlignment(Align.center);
         winnerButton.setAlignment(Align.center);

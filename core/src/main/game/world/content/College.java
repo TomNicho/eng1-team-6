@@ -12,13 +12,14 @@ import main.game.core.Constants.CollegeConstants;
 public class College extends Entity {
     private Texture collegeTexture;
 
-    private int health;
+    private int health, damage;
     private String name, ukey;
     private boolean allied;
     private long lastShot;
 
-    public College(int health, String name, String ukey, Vector2 position, boolean allied) {
+    public College(int health, int damage, String name, String ukey, Vector2 position, boolean allied) {
         this.health = health;
+        this.damage = damage;
         this.name = name;
         this.ukey = ukey;
         this.allied = allied;
@@ -78,6 +79,10 @@ public class College extends Entity {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public String getName() {

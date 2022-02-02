@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="75" height="150" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" source="tAssets/Land.tsx"/>
- <layer id="1" name="Tile Layer 1" width="75" height="150">
-  <data encoding="base64" compression="zlib">
-   eJzt10tuAzEMBFH5/pfOKog3zjTHElutqQK4jcmH8SevMcaLaZ+r3PvtMJVmv6779lVOd25b8Xe/2afL6b8dZ3R3552dVnZn5yc6vVfZ+clO1bCqhZMeVnpY6WGlh1UtnGrhVAsrPZxqYVQLKy2eKz2c9LDSw0kPq1o41cKqFk61sNLiudLDSo/Pdi2+B7X4faXH73Yt/sfRw0oPKz2samGlh1UtvPSwqoWXHlZ6/H6ohZUez5YeVnpY6WGlh5MWz5SeYoXXX1jp8WzpYaWnWmFWt3qy2zdWTzObYfUUs5lWp3thpTXb6WSvVVYneq20Os2sw+oUt26rZC+HVaqZ0yrNzO2E17lebqMkM7dNkpnbJMnMbZFk6L45yct9b4qV+9YkL/edKVbuG7E6z8p9H1ZY7TwduW9McRoNd5ziNBbsfrKX+84Up7Fg9xX3umw+7bCbz07hpIePFk7X8Z67zvnZlGTldkqwcvukWLltup3u7ON26bZy37a7lfueBCf3LSlOY4N7UpzGBjdh5Z9Vue/CCqukmZ37HqzO8fnNfVeKlfsmrPyzIvdNWO0xs3Pfg9UesyLHzolOK/fe/bW/ybFrqtV7XXsmvg8/1bXfCVajea8TrTpfK82rM6xqYaWHlR7vw+tmf7ZjhdcqpxO9Vlud5NZplezV7ZTs5bJKM3M7JXm5jVKs3D4pVm6bBC+3R4qX2yHByn1/gpv71tluqzzdt6U8g+69U7zc++4w+DDMs+YHez0SGg==
-  </data>
- </layer>
-</map>
