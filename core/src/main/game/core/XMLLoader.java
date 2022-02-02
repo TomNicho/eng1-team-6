@@ -1,33 +1,28 @@
 package main.game.core;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
-
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
 import main.game.world.content.College;
 import main.game.world.content.NPC;
 import main.game.world.player.Objectives.Objective;
 
 public class XMLLoader {
-    private File xmlFile;
+    private FileHandle handle;
     private Set<College> colleges;
     private Set<NPC> npcs;
     private List<Objective> objectives;
 
-    public XMLLoader(String filePath) {
-        this.xmlFile = new File(filePath);
+    public XMLLoader(FileHandle handle) {
+        this.handle = handle;
         this.npcs = new HashSet<>();
         this.colleges = new HashSet<>();
         this.objectives = new ArrayList<>();
@@ -35,56 +30,49 @@ public class XMLLoader {
 
     /**
      * Loads all the objects from the XML File given and initalises all {@link Entity}, and {@link Objective} instances present.
-     * @throws ParserConfigurationException The document cannot be created.
-     * @throws IOException If any IO errors occur.
-     * @throws SAXException If any parse errors occur.
+     * @see
+     * {@link XmlReader}
      */
-    public void load() throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = documentBuilder.parse(xmlFile);
- 
-        NodeList xmlcolleges = document.getElementsByTagName("college");
-        NodeList xmlnpcs = document.getElementsByTagName("npc");
-        NodeList xmlObjectives = document.getElementsByTagName("objective");
+    public void load() {
+        XmlReader reader = new XmlReader();
+        Element root = reader.parse(this.handle);
 
-        for (int i = 0; i < xmlnpcs.getLength(); i++){
-            Node npcNode = xmlnpcs.item(i);
-            Element npcElement = (Element) npcNode;
-            int npcElementHealth = Integer.parseInt(npcElement.getElementsByTagName("health").item(0).getTextContent());
-            int npcElementX = Integer.parseInt(npcElement.getElementsByTagName("x").item(0).getTextContent());
-            int npcElementY = Integer.parseInt(npcElement.getElementsByTagName("y").item(0).getTextContent());
-            int npcElementRotation = Integer.parseInt(npcElement.getElementsByTagName("rotation").item(0).getTextContent());
-            npcs.add(new NPC(npcElementHealth, new Vector2(npcElementX, npcElementY), npcElementRotation));
+        Array<Element> xmlNpcs = root.getChildByName("npcs").getChildrenByName("npc");
+        Array<Element> xmlColleges = root.getChildByName("colleges").getChildrenByName("college");
+        Array<Element> xmlObjectives = root.getChildByName("objectives").getChildrenByName("objective");
+
+        for (Element npc : xmlNpcs) {
+            int health = Integer.parseInt(npc.get("health"));
+            int npcx = Integer.parseInt(npc.get("x"));
+            int npxy = Integer.parseInt(npc.get("y"));
+            int rotation = Integer.parseInt(npc.get("rotation"));
+            npcs.add(new NPC(health, new Vector2(npcx, npxy), rotation));
         }
 
-        for (int i = 0; i < xmlcolleges.getLength(); i++){
-            Element collegeElement = (Element) xmlcolleges.item(i);
-            int collegeElementHealth = Integer.parseInt(collegeElement.getElementsByTagName("health").item(0).getTextContent());
-            int collegeElementDamage = Integer.parseInt(collegeElement.getElementsByTagName("damage").item(0).getTextContent());
-            int collegeElementX = Integer.parseInt(collegeElement.getElementsByTagName("x").item(0).getTextContent());
-            int collegeElementY = Integer.parseInt(collegeElement.getElementsByTagName("y").item(0).getTextContent());
-            String collegeElementName = collegeElement.getElementsByTagName("name").item(0).getTextContent();
-            String collegeKey = collegeElement.getElementsByTagName("ukey").item(0).getTextContent();
-
-            if (collegeKey.equals("college-goodricke")) {
-                colleges.add(new College(collegeElementHealth, collegeElementDamage, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY), true));
-            } else {
-                colleges.add(new College(collegeElementHealth, collegeElementDamage, collegeElementName, collegeKey, new Vector2(collegeElementX, collegeElementY), false));
-            }
-        }
-
-        for (int i = 0; i < xmlObjectives.getLength(); i++) {
-            Element objectiveElement = (Element) xmlObjectives.item(i); 
-            String name = objectiveElement.getElementsByTagName("name").item(0).getTextContent();
-            String uKey = objectiveElement.getElementsByTagName("ukey").item(0).getTextContent();
-            int amount = Integer.parseInt(objectiveElement.getElementsByTagName("amount").item(0).getTextContent());
-            int xp = Integer.parseInt(objectiveElement.getElementsByTagName("xp").item(0).getTextContent());
-            int objX = Integer.parseInt(objectiveElement.getElementsByTagName("x").item(0).getTextContent());
-            int objY = Integer.parseInt(objectiveElement.getElementsByTagName("y").item(0).getTextContent());
+        for (Element objective : xmlObjectives) {
+            String name = objective.get("name");
+            String uKey = objective.get("ukey");
+            int amount = Integer.parseInt(objective.get("amount"));
+            int xp = Integer.parseInt(objective.get("xp"));
+            int objX = Integer.parseInt(objective.get("x"));
+            int objY = Integer.parseInt(objective.get("y"));
             objectives.add(new Objective(name, uKey, amount, xp, new Vector2(objX, objY)));
         }
 
-        documentBuilder.reset();
+        for (Element college : xmlColleges) {
+            int health = Integer.parseInt(college.get("health"));
+            int damage = Integer.parseInt(college.get("damage"));
+            int objx = Integer.parseInt(college.get("x"));
+            int objy = Integer.parseInt(college.get("y"));
+            String name = college.get("name");
+            String key = college.get("ukey");
+
+            if (key.equals("college-goodricke")) {
+                colleges.add(new College(health, damage, name, key, new Vector2(objx, objy), true));
+            } else {
+                colleges.add(new College(health, damage, name, key, new Vector2(objx, objy), false));
+            }
+        }
     }
 
     public Set<College> getColleges() {
