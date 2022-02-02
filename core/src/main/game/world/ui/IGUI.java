@@ -64,8 +64,8 @@ public class IGUI {
         health.setPosition(Gdx.graphics.getWidth() / 2 - health.getWidth() / 2, Gdx.graphics.getHeight() / 2 - PAGE_OFFSET_Y * 4 - health.getHeight());
 
         winner.setFontScale(2f);
-        winner.setPosition(Gdx.graphics.getWidth() * 0.5f - winner.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f - winner.getHeight() / 2);
-        winnerButton.setPosition(Gdx.graphics.getWidth() * 0.5f - winnerButton.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f - winner.getHeight() / 2 - PAGE_OFFSET_Y * 2 - winnerButton.getHeight() / 2);
+        winner.setPosition(Gdx.graphics.getWidth() * 0.5f - winner.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f + PAGE_OFFSET_Y * 6 + winner.getHeight() / 2);
+        winnerButton.setPosition(Gdx.graphics.getWidth() * 0.5f - winnerButton.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f - winner.getHeight() / 2 + PAGE_OFFSET_Y * 4 - winnerButton.getHeight() / 2);
 
         //Set some label features, like text alignment and wrapping for multiline text.
         objectiveName.setWrap(true);
