@@ -17,7 +17,7 @@ public class DesktopLauncher {
         config.width = 1280;
         config.height = 720;
         // config.fullscreen = true;
-        config.addIcon("icons/pirate_icon.png", FileType.Internal);
+        config.addIcon("icons/newIcon.png", FileType.Internal);
         new LwjglApplication(new MainRunner(), config);
     }
 }

@@ -101,4 +101,11 @@ public class College extends Entity {
         if (pos.dst(this.getPosition()) <= CollegeConstants.PROCESS_RANGE) return true;
         else return false;
     }
+    public void capture(){
+        Vector2 replacePos = new Vector2(this.getPosition());
+        this.name = "captured";
+        this.collegeTexture = new Texture(Gdx.files.internal("textures/captured.png"));
+        this.sprite = new Sprite(this.collegeTexture);
+        this.sprite.setPosition(replacePos.x, replacePos.y);
+    }
 }
