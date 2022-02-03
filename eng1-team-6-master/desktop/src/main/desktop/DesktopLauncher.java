@@ -16,7 +16,7 @@ public class DesktopLauncher {
         config.vSyncEnabled = true;
         config.width = 1280;
         config.height = 720;
-        // config.fullscreen = true;
+        config.fullscreen = true;
         config.addIcon("icons/newIcon.png", FileType.Internal);
         new LwjglApplication(new MainRunner(), config);
     }

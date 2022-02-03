@@ -10,7 +10,7 @@ public class Constants {
 
     public static class CollegeConstants {
         public static final float FIRE_RATE = 2000f;
-        public static final float RANGE = 500f;
+        public static final float RANGE = 600f;
         public static final float PROCESS_RANGE = 1000f;
         public static final float BULLET_SPEED = 250f;
         public static final int GOLD = 500;
