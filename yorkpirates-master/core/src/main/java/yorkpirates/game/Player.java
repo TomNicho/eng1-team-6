@@ -16,7 +16,7 @@ public class Player extends GameObject {
 
     // Player constants
     public float SPEED = 70f;
-    public float playerProjectileDamage = 20;
+    public static float playerProjectileDamage = 20;
     public float projectileShootCooldown = 0.1f;
     private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
     private static final float CAMERA_SLACK = 0.1f; // What percentage of the screen the player can move in before the camera follows.
@@ -56,7 +56,13 @@ public class Player extends GameObject {
         // Generate health
         Array<Texture> sprites = new Array<>();
         sprites.add(new Texture("allyHealthBar.png"));
-        setMaxHealth(HEALTH);
+        if(YorkPirates.difficulty=="easy"){
+            setMaxHealth(HEALTH + 100);
+        } else if(YorkPirates.difficulty=="medium"){
+            setMaxHealth(HEALTH);
+        } else if(YorkPirates.difficulty=="hard"){
+            setMaxHealth(HEALTH - 100);
+        }
         playerHealth = new HealthBar(this,sprites);
     }
 
@@ -141,6 +147,16 @@ public class Player extends GameObject {
                 }
             }
         }
+
+        // Set Player Projectile Damage.
+
+        // if(YorkPirates.difficulty=="easy"){
+        //     playerProjectileDamage += 10;
+        // } else if(YorkPirates.difficulty=="medium"){
+        //     // Player Projectile Damage is 20 still
+        // } else if(YorkPirates.difficulty=="hard"){
+        //     playerProjectileDamage -= 10;
+        // }
         
     }
 
@@ -255,4 +271,6 @@ public class Player extends GameObject {
     public float getDistance() {
         return distance;
     }
+
+
 }

@@ -1,185 +1,185 @@
-package yorkpirates.game;
+// package yorkpirates.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.ScreenUtils;
+// import com.badlogic.gdx.Gdx;
+// import com.badlogic.gdx.ScreenAdapter;
+// import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+// import com.badlogic.gdx.graphics.g2d.TextureRegion;
+// import com.badlogic.gdx.scenes.scene2d.InputEvent;
+// import com.badlogic.gdx.scenes.scene2d.Stage;
+// import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+// import com.badlogic.gdx.scenes.scene2d.ui.Image;
+// import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+// import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+// import com.badlogic.gdx.scenes.scene2d.ui.Table;
+// import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+// import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+// import com.badlogic.gdx.utils.Align;
+// import com.badlogic.gdx.utils.Scaling;
+// import com.badlogic.gdx.utils.ScreenUtils;
 
-public class DifficultyScreen extends ScreenAdapter {
-    private final YorkPirates game;
-    private final GameScreen nextGame;
-    private final Stage stage;
+// public class DifficultyScreen extends ScreenAdapter {
+//     private final YorkPirates game;
+//     private final GameScreen nextGame;
+//     private final Stage stage;
 
-    private final TextField textBox;
-    private final Cell<Image> titleCell;
+//     private final TextField textBox;
+//     private final Cell<Image> titleCell;
 
-    private float elapsedTime = 0f;
+//     private float elapsedTime = 0f;
 
-    /**
-     * Initialises the title screen, as well as relevant textures and data it may contain.
-     * @param game  Passes in the base game class for reference.
-     */
-    public DifficultyScreen(YorkPirates game){
-        this.game = game;
+//     /**
+//      * Initialises the title screen, as well as relevant textures and data it may contain.
+//      * @param game  Passes in the base game class for reference.
+//      */
+//     public DifficultyScreen(YorkPirates game){
+//         this.game = game;
 
-        // Generates main gameplay for use as background
-        nextGame = new GameScreen(game);
-        nextGame.setPaused(true);
-        nextGame.setPlayerName("Player");
+//         // Generates main gameplay for use as background
+//         nextGame = new GameScreen(game);
+//         nextGame.setPaused(true);
+//         nextGame.setPlayerName("Player");
 
-        // Generates skin
-        TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
-        skin.addRegions(atlas);
+//         // Generates skin
+//         TextureAtlas atlas;
+//         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
+//         Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+//         skin.addRegions(atlas);
 
-        // Generates stage and table
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setBackground(skin.getDrawable("Selection"));
-        if(YorkPirates.DEBUG_ON) table.setDebug(true);
+//         // Generates stage and table
+//         stage = new Stage();
+//         Gdx.input.setInputProcessor(stage);
+//         Table table = new Table();
+//         table.setFillParent(true);
+//         table.setBackground(skin.getDrawable("Selection"));
+//         if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
-        // Get title texture
-        TextureRegion titleT = game.logo.getKeyFrame(0f);
-        Image title = new Image(titleT);
-        title.setScaling(Scaling.fit);
+//         // Get title texture
+//         TextureRegion titleT = game.logo.getKeyFrame(0f);
+//         Image title = new Image(titleT);
+//         title.setScaling(Scaling.fit);
 
-        // Generate textbox
-        textBox = new TextField("Name (optional)", skin, "edges");
-        textBox.setAlignment(Align.center);
-        textBox.setOnlyFontChars(true);
-        textBox.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                textBox.setText("");
-            }});
+//         // Generate textbox
+//         textBox = new TextField("Name (optional)", skin, "edges");
+//         textBox.setAlignment(Align.center);
+//         textBox.setOnlyFontChars(true);
+//         textBox.addListener(new ClickListener() {
+//             public void clicked(InputEvent event, float x, float y) {
+//                 textBox.setText("");
+//             }});
 
-        // Generate buttons
-        ImageTextButton startButton = new ImageTextButton("Play", skin);
-        ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
-        ImageTextButton easyButton = new ImageTextButton("Easy", skin);
-        ImageTextButton mediumButton = new ImageTextButton("Medium", skin);
-        ImageTextButton hardButton = new ImageTextButton("Hard", skin);
+//         // Generate buttons
+//         //ImageTextButton startButton = new ImageTextButton("Play", skin);
+//         ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
+//         ImageTextButton easyButton = new ImageTextButton("Easy", skin);
+//         ImageTextButton mediumButton = new ImageTextButton("Medium", skin);
+//         ImageTextButton hardButton = new ImageTextButton("Hard", skin);
 
-        startButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                gameStart("easy");
-            }
-        });
-        quitButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                game.quit();
-            }
-        });
-        easyButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                gameStart("easy");
-            }
-        });
-        mediumButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                gameStart("medium");
-            }
-        });
-        hardButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                gameStart("hard");
-            }
-        });
+//         //startButton.addListener(new ClickListener() {
+//             //public void clicked(InputEvent event, float x, float y) {
+//                 //gameStart("easy");
+//             //}
+//         //});
+//         quitButton.addListener(new ClickListener() {
+//             public void clicked(InputEvent event, float x, float y) {
+//                 game.quit();
+//             }
+//         });
+//         easyButton.addListener(new ClickListener() {
+//             public void clicked(InputEvent event, float x, float y) {
+//                 gameStart("easy");
+//             }
+//         });
+//         mediumButton.addListener(new ClickListener() {
+//             public void clicked(InputEvent event, float x, float y) {
+//                 gameStart("medium");
+//             }
+//         });
+//         hardButton.addListener(new ClickListener() {
+//             public void clicked(InputEvent event, float x, float y) {
+//                 gameStart("hard");
+//             }
+//         });
 
-        // Add title to table
-        titleCell = table.add(title).expand();
+//         // Add title to table
+//         titleCell = table.add(title).expand();
 
-        // Add textbox to table
-        table.row();
-        Table textBoxFiller = new Table();
-        textBoxFiller.add().expand().padRight(stage.getWidth()/3);
-        textBoxFiller.add(textBox).expand().fillX();
-        textBoxFiller.add().expand().padLeft(stage.getWidth()/3);
-        if(YorkPirates.DEBUG_ON) textBoxFiller.debug();
-        table.add(textBoxFiller).expand().fill();
+//         // Add textbox to table
+//         table.row();
+//         Table textBoxFiller = new Table();
+//         textBoxFiller.add().expand().padRight(stage.getWidth()/3);
+//         textBoxFiller.add(textBox).expand().fillX();
+//         textBoxFiller.add().expand().padLeft(stage.getWidth()/3);
+//         if(YorkPirates.DEBUG_ON) textBoxFiller.debug();
+//         table.add(textBoxFiller).expand().fill();
 
-        // Add buttons to table
-        table.row();
-        table.add(startButton).expand();
-        table.row();
-        table.add(quitButton).expand();
-        table.row();
-        table.add(easyButton).expand();
-        table.row();
-        table.add(mediumButton).expand();
-        table.row();
-        table.add(hardButton).expand();
+//         // Add buttons to table
+//         //table.row();
+//         //table.add(startButton).expand();
+//         table.row();
+//         table.add(easyButton).expand();
+//         table.row();
+//         table.add(mediumButton).expand();
+//         table.row();
+//         table.add(hardButton).expand();
+//         table.row();
+//         table.add(quitButton).expand();
 
-        // Add table to the stage
-        stage.addActor(table);
-    }
+//         // Add table to the stage
+//         stage.addActor(table);
+//     }
 
-    /**
-     * Is called once every frame. Runs update() and then renders the title screen.
-     * @param delta The time passed since the previously rendered frame.
-     */
-    @Override
-    public void render(float delta){
-        // Update values
-        elapsedTime += delta;
-        update();
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
+//     /**
+//      * Is called once every frame. Runs update() and then renders the title screen.
+//      * @param delta The time passed since the previously rendered frame.
+//      */
+//     @Override
+//     public void render(float delta){
+//         // Update values
+//         elapsedTime += delta;
+//         update();
+//         game.camera.update();
+//         game.batch.setProjectionMatrix(game.camera.combined);
 
-        // Render background
-        ScreenUtils.clear(0f, 0f, 0f, 1.0f);
-        nextGame.render(delta);
+//         // Render background
+//         ScreenUtils.clear(0f, 0f, 0f, 1.0f);
+//         nextGame.render(delta);
 
-        // Animate title
-        TextureRegion frame = game.logo.getKeyFrame(elapsedTime, true);
-        titleCell.setActor(new Image(frame));
+//         // Animate title
+//         TextureRegion frame = game.logo.getKeyFrame(elapsedTime, true);
+//         titleCell.setActor(new Image(frame));
 
-        // Draw UI over the top
-        stage.draw();
-    }
+//         // Draw UI over the top
+//         stage.draw();
+//     }
 
-    /**
-     * Is called once every frame to check for player input.
-     */
-    private void update(){
-        //if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            //gameStart();
-        //}
-    }
+//     /**
+//      * Is called once every frame to check for player input.
+//      */
+//     private void update(){
+//         //if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+//             //gameStart();
+//         //}
+//     }
 
-    /**
-     * Is called to create a new game screen.
-     */
-    private void gameStart(String difflvl){
-        // Get player name
-        //String playerName;
-        //if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
-        //    playerName = "Player";
+//     /**
+//      * Is called to create a new game screen.
+//      */
+//     private void gameStart(String difflvl){
+//         // Get player name
+//         //String playerName;
+//         //if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
+//         //    playerName = "Player";
 
-        //} else{
-        //    playerName = textBox.getText();
-        //}
+//         //} else{
+//         //    playerName = textBox.getText();
+//         //}
 
-        //Set difficulty
-        String difficulty = difflvl;
+//         //Set difficulty
+//         String difficulty = difflvl;
 
-        // Set player name and unpause game
-        nextGame.setPaused(false);
-        //nextGame.setPlayerName(playerName);
-        game.setScreen(nextGame);
-    }
-}
+//         // Set player name and unpause game
+//         nextGame.setPaused(false);
+//         //nextGame.setPlayerName(playerName);
+//         game.setScreen(nextGame);
+//     }
+// }

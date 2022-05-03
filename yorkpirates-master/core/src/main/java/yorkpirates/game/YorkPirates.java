@@ -16,6 +16,8 @@ public class YorkPirates extends Game {
 	public OrthographicCamera camera;
 	public Array<Array<Boolean>> edges;
 
+	public static String difficulty;
+
 	// Animations
 	public Animation<TextureRegion> logo;
 	public Animation<TextureRegion> mouse;

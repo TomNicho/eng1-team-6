@@ -1,18 +1,24 @@
 package yorkpirates.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class TitleScreen extends ScreenAdapter {
+
     private final YorkPirates game;
     private final GameScreen nextGame;
     private final Stage stage;
@@ -65,15 +71,34 @@ public class TitleScreen extends ScreenAdapter {
         // Generate buttons
         ImageTextButton startButton = new ImageTextButton("Play", skin);
         ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
+        ImageTextButton easyButton = new ImageTextButton("Easy", skin);
+        ImageTextButton mediumButton = new ImageTextButton("Medium", skin);
+        ImageTextButton hardButton = new ImageTextButton("Hard", skin);
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameStart();
+                //chooseSettings();
             }
         });
         quitButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.quit();
+            }
+        });
+        easyButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                gameStart("easy");
+            }
+        });
+        mediumButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                gameStart("medium");
+            }
+        });
+        hardButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                gameStart("hard");
             }
         });
 
@@ -91,10 +116,13 @@ public class TitleScreen extends ScreenAdapter {
 
         // Add buttons to table
         table.row();
-        table.add(startButton).expand();
+        table.add(easyButton).expand();
+        table.row();
+        table.add(mediumButton).expand();
+        table.row();
+        table.add(hardButton).expand();
         table.row();
         table.add(quitButton).expand();
-
         // Add table to the stage
         stage.addActor(table);
     }
@@ -107,7 +135,7 @@ public class TitleScreen extends ScreenAdapter {
     public void render(float delta){
         // Update values
         elapsedTime += delta;
-        update();
+        //update();
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
 
@@ -126,12 +154,12 @@ public class TitleScreen extends ScreenAdapter {
     /**
      * Is called once every frame to check for player input.
      */
-    private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            //gameStart();
-            chooseSettings();
-        }
-    }
+    // private void update(){
+    //     if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+    //         //gameStart();
+    //         //chooseSettings();
+    //     }
+    // }
 
     /**
      * Is called to create a new game screen.
@@ -151,20 +179,60 @@ public class TitleScreen extends ScreenAdapter {
         game.setScreen(nextGame);
     }
 
-    private void chooseSettings(){
+    private void gameStart(String difflvl){
         // Get player name
         String playerName;
         if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
             playerName = "Player";
- 
+        
         } else{
             playerName = textBox.getText();
         }
+        
+        // Set difficulty
+        SetDifficulty(difflvl);
+        
         // Set player name and unpause game
-        //nextGame.setPaused(false);
+        nextGame.setPaused(false);
         nextGame.setPlayerName(playerName);
-        //game.setScreen(nextGame);
-        // Sets the screen to the title screen
-		game.setScreen(new DifficultyScreen(game));
+        game.setScreen(nextGame);
+
+        if(YorkPirates.difficulty=="easy"){
+            Player.playerProjectileDamage += 10;
+        } else if(YorkPirates.difficulty=="medium"){
+            // Player Projectile Damage is 20 still
+        } else if(YorkPirates.difficulty=="hard"){
+            Player.playerProjectileDamage -= 10;
+        }
     }
+
+    private void SetDifficulty(String difflvl){
+        YorkPirates.difficulty = difflvl;
+
+        // Set Player Projectile Damage.
+        if(YorkPirates.difficulty=="easy"){
+            Player.playerProjectileDamage += 10;
+        } else if(YorkPirates.difficulty=="medium"){
+            // Player Projectile Damage is 20 still
+        } else if(YorkPirates.difficulty=="hard"){
+            Player.playerProjectileDamage -= 10;
+        }
+    }
+
+    // private void chooseSettings(){
+    //     // Get player name
+    //     String playerName;
+    //     if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
+    //         playerName = "Player";
+ 
+    //     } else{
+    //         playerName = textBox.getText();
+    //     }
+    //     // Set player name and unpause game
+    //     nextGame.setPaused(false);
+    //     nextGame.setPlayerName(playerName);
+    //     game.setScreen(nextGame);
+    //     // Sets the screen to the title screen
+	// 	game.setScreen(nextGame);
+    // }
 }

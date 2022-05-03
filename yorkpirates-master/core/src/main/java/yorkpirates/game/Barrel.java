@@ -15,7 +15,13 @@ public class Barrel extends Obstacle{
         super(frames, fps, x, y, width, height, team,damage);
         this.type = type;
         if(type == BarrelType.BROWN){
-            this.damage = 40;
+            if(YorkPirates.difficulty=="easy"){
+                this.damage = 20;
+            } else if(YorkPirates.difficulty=="medium"){
+                this.damage = 40;
+            } else if(YorkPirates.difficulty=="hard"){
+                this.damage = 60;
+            } 
         }else{
             this.damage = 0;
         }
